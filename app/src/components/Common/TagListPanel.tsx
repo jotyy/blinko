@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TreeView, { flattenTree } from "react-accessible-treeview";
 import { observer } from "mobx-react-lite";
 import { RootStore } from "@/store";
 import { BlinkoStore } from "@/store/blinkoStore";
 import { Icon } from '@/components/Common/Iconify/icons';
 import { SideBarItem } from "../Layout";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input, Button } from "@heroui/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input, Button, Tooltip } from "@heroui/react";
 import EmojiPicker, { EmojiStyle, Theme } from 'emoji-picker-react';
 import { useTheme } from "next-themes";
 import { ShowUpdateTagDialog } from "./UpdateTagPop";
@@ -29,9 +29,9 @@ const Emoji = ({ icon }: { icon: string }) => {
 
 // The fixed slot every row's leading glyph sits in, so names line up across branches and leaves.
 const ICON_SLOT = 'grid place-items-center size-6 shrink-0'
-// Indent per level = slot (1.5rem) + row gap (0.5rem), so a child's icon sits exactly under its
-// parent's name. In rem, so it tracks the root font size the same way the slot does.
-const LEVEL_INDENT_REM = 2
+// Indent per level: just enough for the child's icon to clear the parent's guide line, which runs
+// under the parent's icon centre. The sidebar is narrow, so every level gives names the most room.
+const LEVEL_INDENT_REM = 1.25
 
 // Disclosure triangle drawn for its slot: vertically symmetric about the centre line, and the
 // right-pointing shape sits ~0.5px toward its point so its visual mass, not its box, is centred.
@@ -41,6 +41,22 @@ const Caret = ({ expanded }: { expanded: boolean }) => (
     <path d="M6.25 4.5 L10.75 8 L6.25 11.5 Z" fill="currentColor" stroke="currentColor" strokeWidth="1.25" strokeLinejoin="round" />
   </svg>
 )
+
+// A tag name that only explains itself when it has to: the full name appears in a styled tooltip,
+// and only when the row actually cut it short. Measured on hover, so resizing the sidebar is free.
+const TagName = ({ name }: { name: string }) => {
+  const ref = useRef<HTMLSpanElement>(null)
+  const [cut, setCut] = useState(false)
+  return (
+    <Tooltip content={name} placement="right" delay={500} closeDelay={0} offset={14} isDisabled={!cut}
+      classNames={{ content: 'text-[13px] px-2 py-1' }}>
+      <span ref={ref} className="flex-1 min-w-0 truncate font-medium text-[14px] group-hover:[mask-image:linear-gradient(to_left,transparent_26px,#000_40px)] group-has-[[aria-expanded=true]]:[mask-image:linear-gradient(to_left,transparent_26px,#000_40px)] [@media(hover:none)]:[mask-image:linear-gradient(to_left,transparent_26px,#000_40px)]"
+        onMouseEnter={() => { const el = ref.current; setCut(!!el && el.scrollWidth > el.clientWidth) }}>
+        {name}
+      </span>
+    </Tooltip>
+  )
+}
 
 const ShowEmojiPicker = (element, theme) => {
   RootStore.Get(DialogStore).setData({
@@ -120,8 +136,11 @@ export const TagListPanel = observer(() => {
           level,
           handleSelect,
         }) => (
-          <div {...getNodeProps()} style={{ paddingLeft: `calc(${LEVEL_INDENT_REM * (level - 1)}rem + 6px)` }} >
-            <div className={`${SideBarItem} relative group ${(isSelected(element.id)) ? 'is-selected !bg-primary/12 !text-primary' : ''}`}
+          // The pill spans the panel's full width at every depth; depth lives inside it, as indent
+          // plus one hairline guide per ancestor, centred under that ancestor's icon.
+          <div {...getNodeProps()} className="px-1.5 outline-none">
+            <div className={`${SideBarItem} relative group pr-2 ${(isSelected(element.id)) ? 'is-selected !bg-primary/12 !text-primary' : ''}`}
+              style={{ paddingLeft: `calc(${LEVEL_INDENT_REM * (level - 1)}rem + 0.5rem)` }}
               onClick={e => {
                 //@ts-ignore
                 base.currentRouter = blinko.allTagRouter
@@ -129,6 +148,11 @@ export const TagListPanel = observer(() => {
                 navigate('/?path=all&tagId=' + element.id, { replace: true })
               }}
             >
+              {Array.from({ length: level - 1 }, (_, i) => (
+                <span key={i} aria-hidden="true"
+                  className="absolute inset-y-0 w-px bg-border group-[.is-selected]:bg-primary/25"
+                  style={{ left: `calc(${LEVEL_INDENT_REM * i}rem + 0.5rem + 0.75rem - 0.5px)` }} />
+              ))}
               {isBranch ? (
                 // One fixed slot: the tag icon and the disclosure caret are stacked and
                 // cross-fade on hover, so the row never reflows.
@@ -146,21 +170,26 @@ export const TagListPanel = observer(() => {
                 </div>
               )}
 
-              <div className="truncate overflow-hidden whitespace-nowrap font-medium text-[14px]" title={element.name}>
-                {element.name}
-                {isBranch && element.children?.length > 0 && (
-                  <span className="ml-1 text-xs tabular-nums text-desc group-[.is-selected]:text-current group-[.is-selected]:opacity-70">({element.children.length})</span>
-                )}
-              </div>
+              <TagName name={element.name} />
+
+              {/* The child count sits right after the name; the actions button floats over the row's
+                  end and takes no width at rest — on hover the name's tail fades out beneath it,
+                  and the count steps aside. On touch, where there's no hover, the button stays. */}
+              {isBranch && element.children?.length > 0 && (
+                <span className="shrink-0 pr-1 text-[12px] tabular-nums text-desc group-[.is-selected]:text-current group-[.is-selected]:opacity-70 transition-opacity duration-150 group-hover:!opacity-0 group-has-[[aria-expanded=true]]:!opacity-0 [@media(hover:none)]:!opacity-0">
+                  {element.children.length}
+                </span>
+              )}
+              <div className="absolute right-1.5 top-1/2 -translate-y-1/2 size-6">
               <Dropdown>
                 <DropdownTrigger>
                   <button
                     type="button"
                     aria-label="Tag actions"
                     onClick={e => e.stopPropagation()}
-                    className="ml-auto grid place-items-center size-7 -my-1 -mr-1 rounded-lg opacity-0 group-hover:opacity-100 focus-visible:opacity-100 data-[open=true]:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition-[opacity,background-color] duration-150"
+                    className="absolute inset-0 grid place-items-center rounded-md opacity-0 group-hover:opacity-100 focus-visible:opacity-100 aria-expanded:opacity-100 [@media(hover:none)]:opacity-100 hover:bg-black/[0.06] dark:hover:bg-white/10 aria-expanded:bg-black/[0.06] dark:aria-expanded:bg-white/10 transition-[opacity,background-color] duration-150"
                   >
-                    <Icon icon="ri:more-fill" width="18" height="18" />
+                    <Icon icon="reicon:more-h" width="16" height="16" />
                   </button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
@@ -308,8 +337,9 @@ export const TagListPanel = observer(() => {
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
+              </div>
             </div>
-          </div >
+          </div>
         )}
       />
     </>

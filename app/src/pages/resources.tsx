@@ -1,13 +1,14 @@
 import { RootStore } from "@/store";
 import { ResourceStore } from "@/store/resourceStore";
 import { observer } from "mobx-react-lite";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { ScrollArea } from "@/components/Common/ScrollArea";
 import { Icon } from '@/components/Common/Iconify/icons';
 import { useTranslation } from "react-i18next";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd-next';
 import { toJS } from "mobx";
 import { MemoizedResourceItem } from "@/components/BlinkoResource/ResourceItem";
+import { ResourceGallery } from "@/components/BlinkoResource/ResourceGallery";
 import { ResourceMultiSelectPop } from "@/components/BlinkoResource/ResourceMultiSelectpop";
 import { Breadcrumbs, BreadcrumbItem, Button } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,6 +26,15 @@ const Page = observer(() => {
   }, [resourceStore.blinko.resourceList.value]);
 
   const selectedItems = resourceStore.selectedItems;
+
+  // Gallery by default; the list stays for dragging files into folders. Remembered per browser.
+  const [view, setView] = useState<'gallery' | 'list'>(() => {
+    try { return localStorage.getItem('blinko-resources-view') === 'list' ? 'list' : 'gallery'; } catch { return 'gallery'; }
+  });
+  const chooseView = (v: 'gallery' | 'list') => {
+    setView(v);
+    try { localStorage.setItem('blinko-resources-view', v); } catch { }
+  };
 
   const handleMoveSelectedToParent = useCallback(async () => {
     if (!resourceStore.currentFolder) return;
@@ -96,6 +106,21 @@ const Page = observer(() => {
             </div>
 
             <div className="flex items-center gap-2 mt-2 ">
+              <div role="radiogroup" aria-label={t('view', { defaultValue: 'View' })} className="flex items-center p-0.5 rounded-[10px] bg-muted/70">
+                {([['gallery', 'reicon:gallery-wide', t('gallery', { defaultValue: 'Gallery' })], ['list', 'reicon:list3', t('list', { defaultValue: 'List' })]] as const).map(([key, icon, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    role="radio"
+                    aria-checked={view === key}
+                    aria-label={label}
+                    onClick={() => chooseView(key)}
+                    className={`grid place-items-center size-[28px] rounded-[8px] transition-colors duration-150 ${view === key ? 'bg-card text-foreground [box-shadow:var(--heroui-box-shadow-small)]' : 'text-desc hover:text-foreground'}`}
+                  >
+                    <Icon icon={icon} width="16" height="16" />
+                  </button>
+                ))}
+              </div>
               <motion.div
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -180,7 +205,15 @@ const Page = observer(() => {
             emptyMessage={t('no-resources-found')}
           />
           <PhotoProvider>
-            {resources.length > 0 && (
+            {resources.length > 0 && view === 'gallery' && (
+              <ResourceGallery
+                resources={resources}
+                selectedIds={selectedItems}
+                onSelect={resourceStore.toggleSelect}
+                onFolderClick={(folder) => resourceStore.navigateToFolder(folder, navigate)}
+              />
+            )}
+            {resources.length > 0 && view === 'list' && (
               <Droppable droppableId="resources">
                 {(provided, snapshot) => (
                   <div
