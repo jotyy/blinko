@@ -839,5 +839,10 @@
   "custom-title": "Custom Title",
   "custom-title-tip": "Used for browser tab and sign-in title. Leave empty to use the default title.",
   "custom-title-placeholder": "Enter a title (1-50 chars)",
-  "login-with": "Login With {{title}}"
+  "login-with": "Login With {{title}}",
+  "good-morning": "Good morning",
+  "good-afternoon": "Good afternoon",
+  "good-evening": "Good evening",
+  "start-with": "Start with",
+  "send": "Send"
 }

@@ -151,31 +151,9 @@
   --focus-halo: 0 0 0 3.5px rgb(127 184 168 / 0.32);
 }
 
-/* ---- Translucent overlays: menus, popovers, tooltips, dialogs ----------------------------- */
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  /* Exactly one blurred layer per overlay: the outer content box. The menu or listbox inside it
-     must stay transparent with no filter of its own. Nested backdrop-filters (and their stacked
-     translucent fills) make Chromium flicker while the overlay scales in and out. */
-  [data-slot="content"].bg-content1 {
-    background-color: var(--material-regular) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    backdrop-filter: blur(24px) saturate(180%);
-  }
-  section[role="dialog"].bg-content1 {
-    background-color: var(--material-regular) !important;
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    backdrop-filter: blur(30px) saturate(180%);
-  }
-  /* The backdrop behind a modal dims and softens, instead of a flat grey sheet. */
-  [data-slot="backdrop"] {
-    background-color: rgb(29 28 26 / 0.18) !important;
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-  }
-  .dark [data-slot="backdrop"] {
-    background-color: rgb(0 0 0 / 0.4) !important;
-  }
-}
+/* ---- Overlays: menus, popovers, tooltips, dialogs ---------------------------------------- */
+/* Solid surfaces on purpose. A backdrop-filter on an overlay that scales in made dropdowns and
+   popovers flicker in Arc/Chromium; depth comes from the layered shadows instead. */
 
 /* Under forced colours shadows vanish; keep a real edge on floating surfaces. */
 [data-slot="content"].bg-content1,
@@ -282,4 +260,100 @@ button.h-12 > span > svg {
 /* ---- Selection ------------------------------------------------------------------------------ */
 ::selection {
   background-color: color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+/* ---- Note composer: formatting toolbar inside the card ----------------------------------- */
+/* Same vocabulary as the AI composer: 30px rounded buttons, one icon size, quiet until hovered,
+   groups separated by a short hairline. Scoped to the tray layout only. */
+.composer-card .vditor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px 4px !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+}
+.composer-card .vditor-toolbar__item {
+  padding: 0 !important;
+  float: none !important;
+}
+.composer-card .vditor-toolbar__item .vditor-tooltipped {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0 !important;
+  border-radius: 8px;
+  color: var(--desc) !important;
+  transition-property: background-color, color;
+  transition-duration: 150ms;
+}
+.composer-card .vditor-toolbar__item .vditor-tooltipped:hover,
+.composer-card .vditor-toolbar__item .vditor-tooltipped.vditor-menu--current {
+  background-color: var(--hover);
+  color: var(--foreground) !important;
+}
+.composer-card .vditor-toolbar__item svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+.composer-card .vditor-toolbar__divider {
+  float: none !important;
+  width: 1px !important;
+  height: 16px !important;
+  margin: 0 6px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background-color: var(--border);
+}
+/* The text area aligns its first line with the toolbar's first icon. */
+.composer-card .vditor-reset {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+/* ---- Note composer: action row on the tray --------------------------------------------- */
+/* The tray's actions use the composer vocabulary: 18px glyphs in the secondary colour, darkening
+   on hover. An icon that carries its own colour (the note-type bolt) keeps it — the colour is the
+   state. The send button is excluded: it is a filled control, not a glyph. */
+.composer-tray-row svg:not([style*="color"]):not(button[aria-label] > svg) {
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--desc);
+  transition: color 150ms;
+}
+.composer-tray-row svg[style*="color"] {
+  width: 18px !important;
+  height: 18px !important;
+}
+.composer-tray-row > *:hover svg:not([style*="color"]):not(button[aria-label] > svg),
+.composer-tray-row [role="button"]:hover svg:not([style*="color"]) {
+  color: var(--foreground);
+}
+
+/* Every action in the tray row is the same 32px square and the row keeps one 2px rhythm,
+   whatever wrappers a button sits in. */
+.composer-tray-row {
+  gap: 2px !important;
+}
+.composer-tray-row div.cursor-pointer.rounded-md {
+  width: 32px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  border-radius: 8px;
+}
+/* Wrappers that group several tray buttons keep the same 2px rhythm, with no stray margins. */
+.composer-tray-row :is(div, span):has(> div.cursor-pointer.rounded-md) {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline: 0 !important;
+}
+/* The send button stands 6px apart from the actions before it. */
+.composer-tray-row button[aria-label] {
+  margin-left: 4px !important;
+}
+.composer-tray-row > div {
+  gap: 2px !important;
 }

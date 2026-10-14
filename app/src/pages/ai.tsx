@@ -1,4 +1,3 @@
-import { Button } from '@heroui/react';
 import { useRef, useState, useEffect } from 'react';
 import { AiInput } from '@/components/BlinkoAi/aiInput';
 import { Icon } from '@/components/Common/Iconify/icons';
@@ -43,68 +42,48 @@ const AIPage = observer(() => {
     };
   }, []);
 
-  const buttons = [
-    {
-      label: t('writing'),
-      icon: 'hugeicons:quill-write-02',
-      color: '#0057FF',
-      prompt: t('ai-prompt-writing')
-    },
-    {
-      label: t('coding'),
-      icon: 'solar:code-bold',
-      color: '#FF9500',
-      prompt: t('ai-prompt-coding')
-    },
-    {
-      label: t('translation'),
-      icon: 'hugeicons:message-translate',
-      color: '#2FBC52',
-      prompt: t('ai-prompt-translation', { lang: i18n.language })
-    }
+  // A greeting that follows the clock, and today's date in the interface language.
+  const hour = new Date().getHours();
+  const greeting = hour < 5 ? t('good-evening', { defaultValue: 'Good evening' })
+    : hour < 12 ? t('good-morning', { defaultValue: 'Good morning' })
+      : hour < 18 ? t('good-afternoon', { defaultValue: 'Good afternoon' })
+        : t('good-evening', { defaultValue: 'Good evening' });
+  const today = new Intl.DateTimeFormat(i18n.language, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date());
+  const displayName = userStore.userInfo?.value?.nickName || userStore.userInfo?.value?.name || '';
+
+  // Role presets always; the tool suggestions only when AI tools are on (as before).
+  const starters = [
+    { key: 'writing', label: t('writing'), icon: 'hugeicons:quill-write-02', run: () => aiStore.newRoleChat(t('ai-prompt-writing')) },
+    { key: 'coding', label: t('coding'), icon: 'solar:code-bold', run: () => aiStore.newRoleChat(t('ai-prompt-coding')) },
+    { key: 'translation', label: t('translation'), icon: 'hugeicons:message-translate', run: () => aiStore.newRoleChat(t('ai-prompt-translation', { lang: i18n.language })) },
+    ...(aiStore.withTools.value
+      ? ['ai-prompt-writing-content', 'ai-prompt-translation-content', 'ai-prompt-delete-content', 'ai-prompt-coding-content'].map((k) => ({
+        key: k, label: t(k), icon: 'hugeicons:sparkles', run: () => aiStore.newChatWithSuggestion(t(k)),
+      }))
+      : []),
   ];
 
-  const suggestionActions = [
-    {
-      prompt: t('ai-prompt-writing-content')
-    },
-    {
-      prompt: t('ai-prompt-translation-content')
-    },
-    {
-      prompt: t('ai-prompt-delete-content')
-    },
-    {
-      prompt: t('ai-prompt-coding-content')
-    }
-  ]
+  // Staged entrance for the welcome view: heading, composer, list, 100ms apart. Under reduced
+  // motion the MotionConfig in App.tsx drops the movement and blur, leaving the fade.
+  const enter = (step: number) => ({
+    initial: { opacity: 0, y: 12, filter: 'blur(4px)' },
+    animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    transition: { duration: 0.3, ease: 'easeOut', delay: step * 0.1 },
+  });
 
   return (
     <div
       style={{
         height: isPc ? '100%' : `calc(100% - ${!isVisible ? '0px' : '60px'})`
       }}
-      className={`flex flex-col items-center ${aiStore.isChatting ? 'pt-0' : 'pt-[10vh] md:pt-[20vh]'} w-full gap-4 relative  md:h-[calc(100vh_-_80px)]`}>
+      className={`flex flex-col items-center ${aiStore.isChatting ? 'pt-0' : 'pt-[8vh] md:pt-[16vh] px-4'} w-full gap-0 relative  md:h-[calc(100vh_-_80px)]`}>
       {!aiStore.isChatting ? (
-        <div className="flex justify-center w-full">
-          <motion.div
-            initial={{ width: 0, scaleX: 0 }}
-            animate={{ width: "auto", scaleX: 1 }}
-            transition={{
-              duration: 1.2,
-              ease: [0.16, 0.77, 0.47, 0.97],
-              scaleX: {
-                type: "spring",
-                stiffness: 150,
-                damping: 15,
-                mass: 0.5
-              }
-            }}
-            className="text-3xl font-bold overflow-hidden whitespace-nowrap origin-left"
-          >
-            {t('welcome-to-blinko', { name: userStore.userInfo?.value?.nickName.toUpperCase() ?? userStore.userInfo?.value?.name.toUpperCase() })}!
-          </motion.div>
-        </div>
+        <motion.header {...enter(0)} className="w-full max-w-[680px] px-1">
+          <div className="text-[13px] text-desc tabular-nums">{today}</div>
+          <h1 className="mt-1 font-[family-name:var(--font-serif)] text-[28px] md:text-[32px] font-medium tracking-[-0.015em] text-foreground">
+            {greeting}{displayName ? `, ${displayName}` : ''}
+          </h1>
+        </motion.header>
       ) : (
         <div className="w-full " style={{ height: `calc(100% - ${inputHeight}px)` }}>
           <BlinkoChatBox />
@@ -121,69 +100,32 @@ const AIPage = observer(() => {
           aiStore.isChatting ? "absolute bottom-2" : "mt-4"
         )}
       >
-        <AnimatePresence>
-          {!aiStore.isChatting && (
-            <motion.div
-              className="w-full md:w-[85%] flex items-center gap-2 mt-4 overflow-x-scroll scrollbar-hide my-3"
-              initial={{ y: 0, opacity: 1 }}
-              exit={{
-                y: 150,
-                opacity: 0,
-                transition: {
-                  type: "spring",
-                  damping: 10,
-                  stiffness: 100
-                }
-              }}
-            >
-              <div className="flex gap-2 px-4 w-full items-center justify-center">
-                {buttons.map((button, index) => (
-                  <Button
-                    onPress={() => {
-                      aiStore.newRoleChat(button.prompt)
-                    }}
-                    className='w-fit'
-                    key={index}
-                    variant='light'
-                    startContent={<Icon className='min-w-[20px]' icon={button.icon} color={button.color} width="20" height="20" />}
+        <motion.div {...(aiStore.isChatting ? {} : enter(1))} className="w-full flex justify-center">
+          <AiInput className={aiStore.isChatting ? 'mt-0' : 'mt-6'} />
+        </motion.div>
+
+        {!aiStore.isChatting && (
+          <motion.div {...enter(2)} className="w-full max-w-[680px] mt-5 px-1">
+            <div className="px-1 mb-1.5 text-[12px] font-medium text-desc">
+              {t('start-with', { defaultValue: 'Start with' })}
+            </div>
+            <div role="list" className="flex flex-wrap gap-2">
+              {starters.map((item) => (
+                <div role="listitem" key={item.key} className="max-w-full">
+                  <button
+                    type="button"
+                    onClick={item.run}
+                    title={item.label}
+                    className="inline-flex max-w-full items-center gap-1.5 h-8 pl-2.5 pr-3 rounded-full border border-border bg-transparent text-[13px] font-medium text-foreground/85 hover:bg-hover hover:text-foreground transition-colors duration-150 enabled:active:scale-[0.96] motion-reduce:enabled:active:scale-100"
                   >
-                    {button.label}
-                  </Button>
-                ))}
-                <Button isIconOnly variant='light' startContent={<Icon icon="icon-park-outline:more" className='min-w-[20px]' width="20" height="20" />} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AiInput className={aiStore.isChatting ? 'mt-0' : 'mt-2'} />
-
-        <AnimatePresence>
-          {RootStore.Get(AiStore).withTools.value && !aiStore.isChatting && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-              className='flex gap-2 mt-4 flex-col items-center'
-            >
-              {suggestionActions.map((action, index) => (
-                <Button
-                  size={isPc ? 'md' : 'sm'}
-                  onPress={() => {
-                    aiStore.newChatWithSuggestion(t(action.prompt))
-                  }}
-                  className='w-fit'
-                  key={index}
-                  radius='full'
-                  variant='flat'
-                >
-                  {t(action.prompt)}
-                </Button>
+                    <Icon icon={item.icon} width="16" height="16" className="text-desc" />
+                    <span className="truncate">{item.label}</span>
+                  </button>
+                </div>
               ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
 
       </motion.div>
     </div>

@@ -199,6 +199,10 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
     store.updateFileOrder(newFiles);
   };
 
+  // Tray + card (shared with the AI composer) for the normal inline editor only; fullscreen and the
+  // top-toolbar layout keep their own full-height structure.
+  const isTray = !showTopToolbar && !store.isFullscreen && !withoutOutline;
+
   const handleFullScreenToggle = () => {
     eventBus.emit('editor:setFullScreen', !store.isFullscreen);
   };
@@ -217,7 +221,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
       <div {...getRootProps()} className={`${isDragAccept ? 'border-2 border-green-500 border-dashed' : ''} ${showTopToolbar ? 'h-full flex flex-col' : ''}`}>
       <Card
         shadow='none'
-        className={`${showTopToolbar ? 'h-full flex flex-col flex-1 min-h-0' : 'p-2'} relative ${withoutOutline ? '' : 'border-2 border-border'} !transition-all ${showTopToolbar ? 'overflow-hidden' : 'overflow-visible'} 
+        className={`${showTopToolbar ? 'h-full flex flex-col flex-1 min-h-0' : 'p-1.5'} relative ${withoutOutline ? '' : (isTray ? 'bg-secondbackground border border-border/70 rounded-[22px]' : 'border-2 border-border')} transition-[border-color,background-color] duration-150 ${showTopToolbar ? 'overflow-hidden' : 'overflow-visible'} 
         ${store.isFullscreen ? 'fixed inset-0 z-[9999] m-0 rounded-none border-none bg-background' : ''}`}
         ref={el => {
           if (el) {
@@ -234,6 +238,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
             store.adjustMobileEditorHeight()
           }}>
 
+          <div className={isTray ? 'composer-card bg-card rounded-[16px] shadow-[var(--heroui-box-shadow-small)] px-1 pt-1 pb-0.5' : 'contents'}>
             <div id={`vditor-${mode}`} className={`vditor ${showTopToolbar ? 'flex-1 overflow-hidden flex flex-col fullscreen-editor' : ''}`} />
           {store.files.length > 0 && (
             <div className='w-full my-2 attachment-container'>
@@ -269,8 +274,10 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
               </div>
             ))}
 
+          </div>
+
           {!showTopToolbar && (
-            <div className='flex w-full items-center gap-1 mt-auto'>
+            <div className={`flex w-full items-center gap-1 mt-auto ${isTray ? 'composer-tray-row px-1 pt-1.5' : ''}`}>
               {renderToolbar()}
               {renderRightToolbar()}
             </div>

@@ -149,19 +149,25 @@ export const MoreMobile = {
   ],
 }
 
+// Grouped by what they act on — block, inline style, lists, inserts — with Vditor's own "|"
+// separators between groups.
 export const ToolbarPC = [
   Emoji,
   Headings,
+  '|',
   Bold,
   Italic,
   Strike,
   Link,
+  '|',
   List,
   OrderedList,
   Check,
+  '|',
   Table,
   Code,
   InlineCode,
+  '|',
   MorePC
 ]
 
