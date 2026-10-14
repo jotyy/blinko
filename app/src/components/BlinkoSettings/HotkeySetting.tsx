@@ -463,7 +463,7 @@ export const HotkeySetting = observer(() => {
                   onKeyDown={handleKeyDown}
                   classNames={{
                     input: "text-center font-mono",
-                    inputWrapper: isRecording ? "ring-2 ring-primary" : ""
+                    inputWrapper: isRecording ? "ring-2 ring-inset ring-primary" : ""
                   }}
                 />
                 <Button
@@ -533,7 +533,7 @@ export const HotkeySetting = observer(() => {
                   onKeyDown={handleAIKeyDown}
                   classNames={{
                     input: "text-center font-mono",
-                    inputWrapper: isRecordingAI ? "ring-2 ring-primary" : ""
+                    inputWrapper: isRecordingAI ? "ring-2 ring-inset ring-primary" : ""
                   }}
                 />
                 <Button

@@ -313,7 +313,7 @@ export const CommentDialog = observer(({ blinkoItem, inline = false, onClose }: 
       )}
 
       {/* Composer */}
-      <div className="mt-2 rounded-[14px] bg-card border border-border focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 transition-[border-color,box-shadow] duration-150">
+      <div className="mt-2 rounded-[14px] bg-card border border-border focus-within:border-primary/50 focus-within:[box-shadow:var(--focus-halo)] transition-[border-color,box-shadow] duration-150">
         {Store.reply.id && (
           <div className="flex items-center gap-1.5 pl-3 pr-1.5 pt-2 text-[12px] text-desc">
             <Icon icon="reicon:reply" width="14" height="14" />
@@ -408,11 +408,11 @@ export const InlineComments = observer(({ blinkoItem }: { blinkoItem: BlinkoItem
       {isOpen && (
         <motion.div
           key="thread"
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
+          initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
+          animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
+          exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
           transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
-          className="overflow-hidden -mx-1 px-1"
+          className="-mx-1 px-1"
           onClick={stop} onDoubleClick={stop} onContextMenu={stop} onKeyDown={stop} onPointerDown={stop}
         >
           <div className="mt-3 pt-3 border-t border-border/70">

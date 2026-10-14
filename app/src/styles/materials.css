@@ -133,7 +133,7 @@
   --material-thin: rgb(255 254 251 / 0.72);
   --material-regular: rgb(255 254 251 / 0.82);
   --material-edge: rgb(255 255 255 / 0.6);
-  --focus-halo: 0 0 0 3.5px rgb(47 107 94 / 0.28);
+  --focus-halo: inset 0 0 0 1.5px color-mix(in srgb, var(--primary) 60%, transparent);
 }
 
 .dark {
@@ -148,7 +148,7 @@
   --material-thin: rgb(32 31 28 / 0.68);
   --material-regular: rgb(32 31 28 / 0.8);
   --material-edge: rgb(255 255 255 / 0.07);
-  --focus-halo: 0 0 0 3.5px rgb(127 184 168 / 0.32);
+  --focus-halo: inset 0 0 0 1.5px color-mix(in srgb, var(--primary) 65%, transparent);
 }
 
 /* ---- Overlays: menus, popovers, tooltips, dialogs ---------------------------------------- */
@@ -190,9 +190,17 @@ button.bg-primary:not([data-disabled="true"]) {
   transition-duration: 150ms;
   transition-timing-function: ease-out;
 }
+/* Focus is drawn inside the edge, never outside it: inputs and buttons live in cards, dialogs,
+   popovers and scroll areas that clip their content, and an outer halo there gets cut off at
+   whichever side touches the container. */
 [data-slot="input-wrapper"]:focus-within,
 [data-slot="trigger"][data-focus-visible="true"] {
   box-shadow: var(--focus-halo);
+}
+/* HeroUI's keyboard-focus outline (outline-2, offset 2px) pulled inside the edge for the same
+   reason. Inputs keep the halo above instead. */
+[data-focus-visible="true"]:not([data-slot="input-wrapper"]):not([data-slot="trigger"]) {
+  outline-offset: -2px !important;
 }
 
 /* ---- Switch ------------------------------------------------------------------------------- */

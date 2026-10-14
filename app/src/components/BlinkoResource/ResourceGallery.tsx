@@ -56,7 +56,7 @@ export const ResourceGallery = observer(({ resources, selectedIds, onSelect, onF
               key={`folder-${folder.folderName}`}
               onClick={() => onFolderClick(folder.folderName || '')}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onFolderClick(folder.folderName || ''); } }}
-              className="group/tile flex items-center gap-2.5 h-12 pl-3 pr-1.5 rounded-[12px] bg-card cursor-pointer outline-none [box-shadow:var(--heroui-box-shadow-small)] hover:[box-shadow:var(--heroui-box-shadow-medium)] transition-shadow duration-150 focus-visible:ring-2 focus-visible:ring-primary"
+              className="group/tile flex items-center gap-2.5 h-12 pl-3 pr-1.5 rounded-[12px] bg-card cursor-pointer outline-none [box-shadow:var(--heroui-box-shadow-small)] hover:[box-shadow:var(--heroui-box-shadow-medium)] transition-shadow duration-150 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
             >
               <Icon icon="reicon:folder-filled" width="20" height="20" className="text-primary/80" />
               <span className="flex-1 min-w-0 truncate text-[13px] font-medium">{folder.folderName}</span>
