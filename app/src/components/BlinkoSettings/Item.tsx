@@ -35,7 +35,7 @@ export const ItemWithTooltip = observer(({ content, toolTipContent }: { content:
     </div>}>
       <div className="flex items-center gap-2">
         {content}
-        <Icon icon="proicons:info" width="15" height="15" className="text-desc" />
+        <Icon icon="reicon:info-circle" width="15" height="15" className="text-desc" />
       </div>
     </Tooltip>
 })

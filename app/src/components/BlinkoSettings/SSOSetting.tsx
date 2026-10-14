@@ -283,7 +283,7 @@ export const SSOSetting = observer(() => {
 
   return (
     <CollapsibleCard
-      icon="tabler:key"
+      icon="reicon:key"
       title={t('sso-settings')}
     >
       <Item
@@ -292,7 +292,7 @@ export const SSOSetting = observer(() => {
           <Button
             size="sm"
             color="primary"
-            startContent={<Icon icon="tabler:plus" width="18" height="18" />}
+            startContent={<Icon icon="reicon:add" width="18" height="18" />}
             onPress={() => {
               RootStore.Get(DialogStore).setData({
                 size: '2xl',
@@ -330,7 +330,7 @@ export const SSOSetting = observer(() => {
                         isIconOnly
                         variant="flat"
                         size="sm"
-                        startContent={<Icon icon="tabler:edit" width="18" height="18" />}
+                        startContent={<Icon icon="reicon:pen" width="18" height="18" />}
                         onPress={() => {
                           RootStore.Get(DialogStore).setData({
                             isOpen: true,
@@ -344,7 +344,7 @@ export const SSOSetting = observer(() => {
                         color="danger"
                         size="sm"
                         className="ml-2"
-                        startContent={<Icon icon="tabler:trash" width="18" height="18" />}
+                        startContent={<Icon icon="reicon:trash" width="18" height="18" />}
                         onPress={() => {
                           showTipsDialog({
                             size: 'sm',

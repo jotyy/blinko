@@ -76,13 +76,13 @@ export const UserSetting = observer(() => {
 
   return (
     <CollapsibleCard
-      icon="tabler:user-cog"
+      icon="reicon:settings"
       title={t('user-list')}
     >
       <Item
         leftContent={<>{t('user-list')}</>}
         rightContent={
-          <Button size="sm" color="primary" startContent={<Icon icon="humbleicons:user-add" width="18" height="18" />}
+          <Button size="sm" color="primary" startContent={<Icon icon="reicon:user-add" width="18" height="18" />}
             onPress={e => {
               RootStore.Get(DialogStore).setData({
                 isOpen: true,
@@ -114,7 +114,7 @@ export const UserSetting = observer(() => {
                   <TableCell>{i.loginType == 'oauth' ? 'oauth' : t('password')}</TableCell>
                   <TableCell>
                     <div className="flex">
-                      <Button isIconOnly variant="flat" size="sm" startContent={<Icon icon="tabler:edit" width="18" height="18" />} onPress={e => {
+                      <Button isIconOnly variant="flat" size="sm" startContent={<Icon icon="reicon:pen" width="18" height="18" />} onPress={e => {
                         RootStore.Get(DialogStore).setData({
                           isOpen: true,
                           title: t('edit-user'),
@@ -123,7 +123,7 @@ export const UserSetting = observer(() => {
                       }}>
                       </Button>
                       <Button isIconOnly color="danger" size="sm" className="ml-2"
-                        startContent={<Icon icon="tabler:trash" width="18" height="18" />}
+                        startContent={<Icon icon="reicon:trash" width="18" height="18" />}
                         onPress={e => {
                           showTipsDialog({
                             size: 'sm',

@@ -38,7 +38,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'basic',
     title: ('basic-information'),
-    icon: 'tabler:tool',
+    icon: 'reicon:user-circle',
     component: <BasicSetting />,
     requireAdmin: false,
     keywords: ['basic', 'information', '基本信息', '基础设置'],
@@ -46,7 +46,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'prefer',
     title: ('preference'),
-    icon: 'tabler:settings-2',
+    icon: 'reicon:tuning',
     component: <PerferSetting />,
     requireAdmin: false,
     keywords: ['preference', 'theme', 'language', '偏好设置', '主题', '语言'],
@@ -54,7 +54,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'hotkey',
     title: ('hotkeys'),
-    icon: 'material-symbols:keyboard',
+    icon: 'reicon:keyboard',
     component: <HotkeySetting />,
     requireAdmin: false,
     keywords: ['hotkey', 'shortcut', 'keyboard', 'desktop', '快捷键', '热键', '桌面'],
@@ -62,7 +62,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'user',
     title: ('user-list'),
-    icon: 'tabler:users',
+    icon: 'reicon:users',
     component: <UserSetting />,
     requireAdmin: true,
     keywords: ['user', 'users', '用户', '用户列表'],
@@ -70,7 +70,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'ai',
     title: 'AI',
-    icon: 'hugeicons:ai-beautify',
+    icon: 'reicon:magic-star',
     component: <AiSetting />,
     requireAdmin: true,
     keywords: ['ai', 'artificial intelligence', '人工智能'],
@@ -78,7 +78,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'httpproxy',
     title: ('http-proxy'),
-    icon: 'tabler:cloud-network',
+    icon: 'reicon:cloud',
     component: <HttpProxySetting />,
     requireAdmin: true,
     keywords: ['proxy', 'http', 'connection', '代理', 'HTTP代理'],
@@ -86,7 +86,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'task',
     title: ('schedule-task'),
-    icon: 'tabler:list-check',
+    icon: 'reicon:checklist',
     component: <TaskSetting />,
     requireAdmin: true,
     keywords: ['task', 'schedule', '任务', '定时任务'],
@@ -94,7 +94,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'storage',
     title: ('storage'),
-    icon: 'tabler:database',
+    icon: 'reicon:database',
     component: <StorageSetting />,
     requireAdmin: true,
     keywords: ['storage', 'database', '存储', '数据库'],
@@ -102,7 +102,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'music',
     title: ('music-settings'),
-    icon: 'tabler:music',
+    icon: 'reicon:music-note',
     component: <MusicSetting />,
     requireAdmin: true,
     keywords: ['music', '音乐设置'],
@@ -110,7 +110,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'import',
     title: ('import'),
-    icon: 'tabler:file-import',
+    icon: 'reicon:import',
     component: <ImportSetting />,
     requireAdmin: true,
     keywords: ['import', 'data', '导入', '数据导入'],
@@ -118,7 +118,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'sso',
     title: ('sso-settings'),
-    icon: 'tabler:key',
+    icon: 'reicon:key',
     component: <SSOSetting />,
     requireAdmin: true,
     keywords: ['sso', 'single sign on', '单点登录'],
@@ -126,7 +126,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'export',
     title: ('export'),
-    icon: 'tabler:file-export',
+    icon: 'reicon:export',
     component: <ExportSetting />,
     requireAdmin: false,
     keywords: ['export', 'data', '导出', '数据导出'],
@@ -134,7 +134,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'plugin',
     title: ('plugin-settings'),
-    icon: 'hugeicons:plug-socket',
+    icon: 'reicon:plug',
     component: <PluginSetting />,
     requireAdmin: true,
     keywords: ['plugin', 'plugins', '插件', '插件设置'],
@@ -142,7 +142,7 @@ export const allSettings: SettingItem[] = [
   {
     key: 'about',
     title: ('about'),
-    icon: 'tabler:info-circle',
+    icon: 'reicon:info-circle',
     component: <AboutSetting />,
     requireAdmin: false,
     keywords: ['about', 'information', '关于', '信息'],

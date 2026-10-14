@@ -119,7 +119,7 @@ export default observer(function ProviderDialogContent({ provider }: ProviderDia
             <div className="w-12 h-12 rounded-lg flex items-center justify-center relative">
               <ProviderIcon provider="openai" className="w-6 h-6 text-primary" />
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                <Icon icon="hugeicons:settings-03" className="w-2.5 h-2.5 text-primary" />
+                <Icon icon="reicon:settings" className="w-2.5 h-2.5 text-primary" />
               </div>
             </div>
           </div>
@@ -127,7 +127,7 @@ export default observer(function ProviderDialogContent({ provider }: ProviderDia
             <h4 className="font-medium">{t('custom-configuration')}</h4>
             <p className="text-sm text-default-500">{t('configure-your-own-api-endpoint')}</p>
           </div>
-          <Icon icon="hugeicons:arrow-right-02" className="w-5 h-5 text-default-400" />
+          <Icon icon="reicon:arrow-right" className="w-5 h-5 text-default-400" />
         </CardBody>
       </Card>
 
@@ -151,7 +151,7 @@ export default observer(function ProviderDialogContent({ provider }: ProviderDia
                     <h5 className="font-medium truncate">{template.label}</h5>
                     <p className="text-xs text-default-500 line-clamp-2">{template.description}</p>
                   </div>
-                  <Icon icon="hugeicons:arrow-right-02" className="w-4 h-4 text-default-400" />
+                  <Icon icon="reicon:arrow-right" className="w-4 h-4 text-default-400" />
                 </CardBody>
               </Card>
             );
@@ -240,7 +240,7 @@ export default observer(function ProviderDialogContent({ provider }: ProviderDia
           {currentStep > 1 && (
             <Button
               variant="flat"
-              startContent={<Icon icon="hugeicons:arrow-left-02" width="16" height="16" />}
+              startContent={<Icon icon="reicon:arrow-left" width="16" height="16" />}
               onPress={() => setCurrentStep(currentStep - 1)}
             >
               {t('back')}

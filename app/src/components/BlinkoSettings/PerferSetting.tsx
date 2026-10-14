@@ -40,7 +40,7 @@ export const PerferSetting = observer(() => {
 
 
   return <CollapsibleCard
-    icon="tabler:brush"
+    icon="reicon:brush"
     title={t('preference')}
   >
     <Item
@@ -247,7 +247,7 @@ export const PerferSetting = observer(() => {
         <SelectDropdown
           value={blinko.config.value?.smallDeviceCardColumns}
           placeholder={t('mobile')}
-          icon="proicons:phone"
+          icon="reicon:phone"
           options={[
             { key: "1", label: "1" },
             { key: "2", label: "2" }
@@ -262,7 +262,7 @@ export const PerferSetting = observer(() => {
         <SelectDropdown
           value={blinko.config.value?.mediumDeviceCardColumns}
           placeholder={t('tablet')}
-          icon="tabler:device-ipad"
+          icon="reicon:tablet"
           options={[
             { key: "1", label: "1" },
             { key: "2", label: "2" },
@@ -279,7 +279,7 @@ export const PerferSetting = observer(() => {
         <SelectDropdown
           value={blinko.config.value?.largeDeviceCardColumns}
           placeholder={t('desktop')}
-          icon="ic:outline-tv"
+          icon="reicon:tv"
           options={[
             { key: "1", label: "1" },
             { key: "2", label: "2" },
@@ -306,7 +306,7 @@ export const PerferSetting = observer(() => {
         <SelectDropdown
           value={blinko.config.value?.timeFormat}
           placeholder={t('select-a-time-format')}
-          icon="mingcute:time-line"
+          icon="reicon:clock-circle"
           options={[
             { key: "relative", label: "1 seconds ago" },
             { key: "YYYY-MM-DD", label: "2024-01-01" },
@@ -361,7 +361,7 @@ export const PerferSetting = observer(() => {
         <SelectDropdown
           value={blinko.config.value?.toolbarVisibility}
           placeholder={t('select-toolbar-visibility')}
-          icon="mdi:toolbar"
+          icon="reicon:widget"
           options={[
             { key: "always-show-toolbar", label: t('always-show-toolbar') },
             { key: "hide-toolbar-on-mobile", label: t('hide-toolbar-on-mobile') },

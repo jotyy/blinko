@@ -63,7 +63,7 @@ export const TaskSetting = observer(() => {
   const { t } = useTranslation()
   return (
     <CollapsibleCard
-      icon="tabler:clock"
+      icon="reicon:clock-circle"
       title={t('schedule-task')}
     >
       {/* TODO: Temporarily disabled backup database feature
@@ -155,7 +155,7 @@ const AITasksPanel = observer(() => {
 
   if (aiTasks.length === 0) {
     return <div className="text-center py-4 text-desc text-sm">
-      <Icon icon="mdi:robot-outline" width="32" height="32" className="mx-auto mb-2 opacity-50" />
+      <Icon icon="reicon:cpu" width="32" height="32" className="mx-auto mb-2 opacity-50" />
       <p>{t('no-ai-tasks')}</p>
       <p className="text-xs mt-1">{t('ai-task-hint')}</p>
     </div>
@@ -164,7 +164,7 @@ const AITasksPanel = observer(() => {
   return (
     <div className="mt-4">
       <div className="flex items-center gap-2 mb-2">
-        <Icon icon="mdi:robot" width="20" height="20" />
+        <Icon icon="reicon:cpu" width="20" height="20" />
         <span className="font-medium">{t('ai-scheduled-tasks')}</span>
         <Chip size="sm" variant="flat">{aiTasks.length}</Chip>
       </div>
@@ -221,7 +221,7 @@ const AITasksPanel = observer(() => {
                       variant="light"
                       onPress={() => handleRunNow(task.id)}
                     >
-                      <Icon icon="mdi:lightning-bolt" width="18" height="18" />
+                      <Icon icon="reicon:bolt" width="18" height="18" />
                     </Button>
                   </Tooltip>
                   <Tooltip content={t('delete')}>
@@ -232,7 +232,7 @@ const AITasksPanel = observer(() => {
                       color="danger"
                       onPress={() => handleDelete(task.id)}
                     >
-                      <Icon icon="mdi:delete-outline" width="18" height="18" />
+                      <Icon icon="reicon:trash" width="18" height="18" />
                     </Button>
                   </Tooltip>
                 </div>
@@ -291,7 +291,7 @@ const TasksPanel = observer(() => {
                     {/* @ts-ignore  */}
                     {i.output?.filePath}
                     {/* @ts-ignore  */}
-                    <Icon className='cursor-pointer' onClick={e => downloadFromLink(getBlinkoEndpoint(i?.output?.filePath))} icon="tabler:download" width="24" height="24" />
+                    <Icon className='cursor-pointer' onClick={e => downloadFromLink(getBlinkoEndpoint(i?.output?.filePath))} icon="reicon:download" width="24" height="24" />
                   </>
                 }
                 {progress && !i.output?.filePath && (

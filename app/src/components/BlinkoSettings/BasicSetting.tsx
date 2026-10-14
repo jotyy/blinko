@@ -81,7 +81,7 @@ export const BasicSetting = observer(() => {
 
   return (
     <CollapsibleCard
-      icon="tabler:settings"
+      icon="reicon:settings"
       title={t('basic-information')}
     >
       <Item
@@ -115,7 +115,7 @@ export const BasicSetting = observer(() => {
               </UploadFileWrapper>
             </div>
 
-            <Button variant="flat" isIconOnly startContent={<Icon icon="tabler:edit" width="20" height="20" />} size='sm'
+            <Button variant="flat" isIconOnly startContent={<Icon icon="reicon:pen" width="20" height="20" />} size='sm'
               onPress={e => {
                 RootStore.Get(DialogStore).setData({
                   isOpen: true,
@@ -123,7 +123,7 @@ export const BasicSetting = observer(() => {
                   content: <UpdateUserInfo />
                 })
               }} />
-            <Button variant="flat" isIconOnly startContent={<Icon icon="material-symbols:password" width="20" height="20" />} size='sm'
+            <Button variant="flat" isIconOnly startContent={<Icon icon="reicon:lock-password" width="20" height="20" />} size='sm'
               onPress={e => {
                 RootStore.Get(DialogStore).setData({
                   title: t('rest-user-password'),
@@ -133,7 +133,7 @@ export const BasicSetting = observer(() => {
               }} />
             {
               user.userInfo?.value?.loginType == 'oauth' &&
-              <Button variant="flat" isIconOnly startContent={<Icon icon="tabler:link" width="20" height="20" />} size='sm'
+              <Button variant="flat" isIconOnly startContent={<Icon icon="reicon:link" width="20" height="20" />} size='sm'
                 onPress={e => {
                   RootStore.Get(DialogStore).setData({
                     title: t('link-account'),
@@ -146,7 +146,7 @@ export const BasicSetting = observer(() => {
 
             {
               user.userInfo?.value?.isLinked &&
-              <Button color="danger" variant="flat" isIconOnly startContent={<Icon icon="hugeicons:unlink-03" width="20" height="20" />} size='sm'
+              <Button color="danger" variant="flat" isIconOnly startContent={<Icon icon="reicon:link-broken" width="20" height="20" />} size='sm'
                 onPress={e => {
                   showTipsDialog({
                     title: t('unlink-account'),
@@ -236,7 +236,7 @@ export const BasicSetting = observer(() => {
                 console.log('user.id', user.id);
                 user.userInfo.call(Number(user.id))
               }}
-              icon="fluent:arrow-sync-12-filled"
+              icon="reicon:refresh"
               width="20"
               height="20"
             />
@@ -369,7 +369,7 @@ export const BasicSetting = observer(() => {
         leftContent={<></>}
         rightContent={
           <Tooltip placement="bottom" content={t('logout')}>
-            <Button isIconOnly startContent={<Icon icon="hugeicons:logout-05" width="20" height="20" />} color='danger' onPress={async () => {
+            <Button isIconOnly startContent={<Icon icon="reicon:logout" width="20" height="20" />} color='danger' onPress={async () => {
               await signOut({ callbackUrl: '/signin' })
               eventBus.emit('user:signout')
             }}></Button>

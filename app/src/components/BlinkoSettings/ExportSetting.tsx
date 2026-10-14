@@ -62,7 +62,7 @@ export const ExportSetting = observer(() => {
 
   return (
     <CollapsibleCard
-      icon="tabler:file-export"
+      icon="reicon:export"
       title={t('export')}
     >
       <Card shadow="none" className="flex flex-col p-4 bg-background">
@@ -117,7 +117,7 @@ export const ExportSetting = observer(() => {
             className="mt-4"
             color="primary"
             onPress={handleExport}
-            startContent={<Icon icon="system-uicons:arrow-top-right" width="24" height="24" />}
+            startContent={<Icon icon="reicon:arrow-right-up" width="24" height="24" />}
           >
             {t('export')}
           </Button>

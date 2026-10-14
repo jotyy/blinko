@@ -258,7 +258,7 @@ export default observer(function ModelDialogContent({ model }: ModelDialogConten
               aiSettingStore.fetchProviderModels.loading.value ? (
                 <Icon icon="line-md:loading-twotone-loop" width="14" height="14" className="animate-spin" />
               ) : (
-                <Icon icon="famicons:sync" width="14" height="14" />
+                <Icon icon="reicon:refresh" width="14" height="14" />
               )
             }
             onPress={fetchProviderModels}
@@ -327,7 +327,7 @@ export default observer(function ModelDialogContent({ model }: ModelDialogConten
         <div>
           <p className="text-sm font-semibold text-default-600">{t('model-capabilities')}</p>
           <p className="text-xs text-default-500 mt-1 flex items-center">
-            <Icon icon="hugeicons:alert-circle" width="12" height="12" className="inline mr-1 text-warning" />
+            <Icon icon="reicon:alert-circle" width="12" height="12" className="inline mr-1 text-warning" />
             <div>{t('model-cap-desc')}</div>
           </p>
         </div>
@@ -370,7 +370,7 @@ export default observer(function ModelDialogContent({ model }: ModelDialogConten
         {editingModel.capabilities?.audio && (
           <div className="mt-2 p-3 bg-warning-50 border border-warning-200 rounded-lg">
             <p className="text-sm text-warning-700">
-              <Icon icon="hugeicons:alert-circle" width="14" height="14" className="inline mr-2" />
+              <Icon icon="reicon:alert-circle" width="14" height="14" className="inline mr-2" />
               Currently only OpenAI-compatible audio models are supported.
             </p>
           </div>
@@ -381,10 +381,10 @@ export default observer(function ModelDialogContent({ model }: ModelDialogConten
       {editingModel.capabilities?.embedding && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <Icon icon="hugeicons:search-list-02" width="16" height="16" />
+            <Icon icon="reicon:search" width="16" height="16" />
             <p className="text-sm font-semibold text-default-600">Embedding Dimensions</p>
             <Tooltip content="Specify the dimensions for this embedding model. Leave 0 for auto-detection.">
-              <Icon icon="proicons:info" width="14" height="14" />
+              <Icon icon="reicon:info-circle" width="14" height="14" />
             </Tooltip>
           </div>
           <Input
@@ -415,7 +415,7 @@ export default observer(function ModelDialogContent({ model }: ModelDialogConten
         <Button
           color="primary"
           variant='light'
-          startContent={<Icon icon="hugeicons:connect" width="16" height="16" />}
+          startContent={<Icon icon="reicon:plug" width="16" height="16" />}
           onPress={testModelConnection}
           isDisabled={!editingModel.modelKey || !selectedProvider}
         >

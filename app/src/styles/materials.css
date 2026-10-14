@@ -364,3 +364,8 @@ button.h-12 > span > svg {
 .settings-card-body > * + .settings-row {
   border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
 }
+/* The card owns the bottom inset (12px); a final row does not add its own on top of it. */
+.settings-card-body > .settings-row:last-child,
+.settings-card-body > :last-child > .settings-row:last-child {
+  padding-bottom: 0;
+}

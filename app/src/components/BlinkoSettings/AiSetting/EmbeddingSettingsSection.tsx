@@ -103,7 +103,7 @@ export const EmbeddingSettingsSection = observer(function EmbeddingSettingsSecti
 
 
   return (
-    <CollapsibleCard icon="mingcute:vector-line" title="Embedding Management">
+    <CollapsibleCard icon="reicon:pen" title="Embedding Management">
       <div className="space-y-4">
         <Item
           type={isPc ? 'row' : 'col'}
@@ -243,7 +243,7 @@ export const EmbeddingSettingsSection = observer(function EmbeddingSettingsSecti
                     {rebuildProgress?.percentage || 0}%
                   </div>
                 ) : (
-                  <Icon icon="mingcute:refresh-4-ai-line" width="16" height="16" />
+                  <Icon icon="reicon:magic-star" width="16" height="16" />
                 )
               }
               onPress={handleRebuildClick}

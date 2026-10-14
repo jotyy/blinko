@@ -85,7 +85,7 @@ export const AboutSetting = observer(() => {
 
   return (
     <CollapsibleCard
-      icon="tabler:info-circle"
+      icon="reicon:info-circle"
       title={t('about')}
     >
       <div className="flex items-start space-x-4 mb-6">
@@ -99,7 +99,7 @@ export const AboutSetting = observer(() => {
                 variant="flat"
                 size="sm"
                 className="text-xs"
-                startContent={<Icon icon="mingcute:version-fill" width="16" height="16" />}
+                startContent={<Icon icon="reicon:history" width="16" height="16" />}
               >
                 {t('server')}: v{store.serverVersion.value}
               </Chip>
@@ -126,7 +126,7 @@ export const AboutSetting = observer(() => {
                   variant="flat"
                   size="sm"
                   className="text-xs"
-                  startContent={<Icon icon="mingcute:version-fill" width="16" height="16" />}
+                  startContent={<Icon icon="reicon:history" width="16" height="16" />}
                 >
                   {t('client')}: v{packageJson.version}
                 </Chip>
@@ -209,7 +209,7 @@ export const AboutSetting = observer(() => {
               size="sm"
               color="warning"
               variant="flat"
-              startContent={<Icon icon="mdi:cached" width="16" />}
+              startContent={<Icon icon="reicon:refresh" width="16" />}
               onPress={clearBrowserCache}
             >
               {t('clear-cache')}

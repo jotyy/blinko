@@ -120,7 +120,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
               />
               {provider.provider === 'custom' && (
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-primary rounded-full flex items-center justify-center">
-                  <Icon icon="hugeicons:settings-03" className="w-2 h-2 text-white" />
+                  <Icon icon="reicon:settings" className="w-2 h-2 text-white" />
                 </div>
               )}
             </div>
@@ -136,7 +136,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
               size="sm"
               variant="flat"
               isIconOnly
-              startContent={<Icon icon="hugeicons:settings-02" width="16" height="16" />}
+              startContent={<Icon icon="reicon:settings" width="16" height="16" />}
               onPress={() => {
                 RootStore.Get(DialogStore).setData({
                   isOpen: true,
@@ -152,7 +152,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
               color="danger"
               isIconOnly
               variant="flat"
-              startContent={<Icon icon="hugeicons:delete-01" width="16" height="16" />}
+              startContent={<Icon icon="reicon:trash" width="16" height="16" />}
               onPress={() => handleDeleteProvider(provider.id)}
             >
             </Button>
@@ -174,7 +174,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                 size="sm"
                 variant='light'
                 color="primary"
-                startContent={<Icon icon="hugeicons:add-01" width="14" height="14" />}
+                startContent={<Icon icon="reicon:add" width="14" height="14" />}
                 onPress={() => {
                   RootStore.Get(DialogStore).setData({
                     isOpen: true,
@@ -278,7 +278,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                               size="sm"
                               variant="flat"
                               isIconOnly
-                              startContent={<Icon icon="hugeicons:connect" width="12" height="12" />}
+                              startContent={<Icon icon="reicon:plug" width="12" height="12" />}
                               onPress={() => {
                                 RootStore.Get(ToastPlugin).promise(
                                   api.ai.testConnect.mutate({
@@ -298,7 +298,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                               size="sm"
                               variant="flat"
                               isIconOnly
-                              startContent={<Icon icon="hugeicons:settings-02" width="12" height="12" />}
+                              startContent={<Icon icon="reicon:settings" width="12" height="12" />}
                               onPress={() => {
                                 RootStore.Get(DialogStore).setData({
                                   isOpen: true,
@@ -313,7 +313,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                               color="danger"
                               variant="flat"
                               isIconOnly
-                              startContent={<Icon icon="hugeicons:delete-01" width="12" height="12" />}
+                              startContent={<Icon icon="reicon:trash" width="12" height="12" />}
                               onPress={() => handleDeleteModel(model.id, model.providerId)}
                             />
                           </div>
@@ -347,7 +347,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                             size="sm"
                             variant="flat"
                             isIconOnly
-                            startContent={<Icon icon="hugeicons:connect" width="12" height="12" />}
+                            startContent={<Icon icon="reicon:plug" width="12" height="12" />}
                             onPress={() => {
                               RootStore.Get(ToastPlugin).promise(
                                 api.ai.testConnect.mutate({
@@ -367,7 +367,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                             size="sm"
                             variant="flat"
                             isIconOnly
-                            startContent={<Icon icon="hugeicons:settings-02" width="12" height="12" />}
+                            startContent={<Icon icon="reicon:settings" width="12" height="12" />}
                             onPress={() => {
                               RootStore.Get(DialogStore).setData({
                                 isOpen: true,
@@ -382,7 +382,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                             color="danger"
                             variant="flat"
                             isIconOnly
-                            startContent={<Icon icon="hugeicons:delete-01" width="12" height="12" />}
+                            startContent={<Icon icon="reicon:trash" width="12" height="12" />}
                             onPress={() => handleDeleteModel(model.id, model.providerId)}
                           />
                         </div>
@@ -392,7 +392,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
                 ))
               ) : (
                 <div className="text-center py-8 text-default-400">
-                  <Icon icon="hugeicons:file-search" className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                  <Icon icon="reicon:search" className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">{t('no-data')}</p>
                 </div>
               )}

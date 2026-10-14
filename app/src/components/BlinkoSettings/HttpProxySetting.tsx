@@ -64,7 +64,7 @@ export const HttpProxySetting = observer(() => {
   };
 
   return (
-    <CollapsibleCard icon="tabler:cloud-network" title={t('http-proxy')}>
+    <CollapsibleCard icon="reicon:cloud" title={t('http-proxy')}>
       <Item
         leftContent={
           <ItemWithTooltip
@@ -228,9 +228,9 @@ export const HttpProxySetting = observer(() => {
                     }}
                   >
                     {store.isProxyPasswordVisible ? (
-                      <Icon icon="solar:eye-closed-linear" className="text-2xl pointer-events-none" />
+                      <Icon icon="reicon:eye-closed" className="text-2xl pointer-events-none" />
                     ) : (
-                      <Icon icon="solar:eye-linear" className="text-2xl pointer-events-none" />
+                      <Icon icon="reicon:eye" className="text-2xl pointer-events-none" />
                     )}
                   </button>
                 }
@@ -277,8 +277,8 @@ export const HttpProxySetting = observer(() => {
                     <div className={`p-3 rounded-lg mt-2 ${testResult.success ? 'bg-success-50 text-success-600' : 'bg-danger-50 text-danger-600'}`}>
                       <div className="flex items-center gap-2">
                         {testResult.success 
-                          ? <Icon icon="mdi:check-circle" width="20" height="20" /> 
-                          : <Icon icon="mdi:alert-circle" width="20" height="20" />
+                          ? <Icon icon="reicon:check-circle" width="20" height="20" /> 
+                          : <Icon icon="reicon:alert-circle" width="20" height="20" />
                         }
                         <span className="font-medium">{testResult.message}</span>
                       </div>

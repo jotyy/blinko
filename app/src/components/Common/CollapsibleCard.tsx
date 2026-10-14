@@ -31,7 +31,7 @@ export const CollapsibleCard = ({
   };
 
   return (
-    <Card shadow="none" radius="none" className={`settings-card flex flex-col px-4 pt-3 pb-1 bg-card rounded-[16px] [box-shadow:var(--heroui-box-shadow-small)] relative ${className}`}>
+    <Card shadow="none" radius="none" className={`settings-card flex flex-col px-4 pt-3 pb-3 bg-card rounded-[16px] [box-shadow:var(--heroui-box-shadow-small)] relative ${className}`}>
       <div className="flex items-center justify-between min-h-[36px]">
         <div className="flex items-center gap-2 text-foreground">
           <Icon icon={icon} width="17" height="17" className="text-desc" />
@@ -44,7 +44,7 @@ export const CollapsibleCard = ({
           className="grid place-items-center size-[28px] rounded-full text-desc hover:text-foreground hover:bg-hover transition-colors duration-150"
         >
           <Icon
-            icon="tabler:chevron-down"
+            icon="reicon:chevron-down"
             width="16"
             height="16"
             className={`transition-transform duration-150 motion-reduce:transition-none ${isCollapsed ? '' : 'rotate-180'}`}

@@ -318,7 +318,7 @@ const McpServerCard = observer(({ server }: { server: McpServer }) => {
                   className="h-6 min-w-0 px-2"
                   onPress={handleViewTools}
                 >
-                  <Icon icon="mdi:connection" className="mr-1" width="14" />
+                  <Icon icon="reicon:plug" className="mr-1" width="14" />
                   <span className="hidden sm:inline">{connectionStatus.toolCount} tools</span>
                   <span className="sm:hidden">{connectionStatus.toolCount}</span>
                 </Button>
@@ -359,7 +359,7 @@ const McpServerCard = observer(({ server }: { server: McpServer }) => {
                 onPress={handleTest}
                 isLoading={isTesting}
               >
-                <Icon icon="mdi:connection" width="18" />
+                <Icon icon="reicon:plug" width="18" />
               </Button>
             </Tooltip>
             <Tooltip content={t('edit')}>
@@ -369,7 +369,7 @@ const McpServerCard = observer(({ server }: { server: McpServer }) => {
                 variant="flat"
                 onPress={handleEdit}
               >
-                <Icon icon="mdi:pencil" width="18" />
+                <Icon icon="reicon:pen" width="18" />
               </Button>
             </Tooltip>
             <Tooltip content={t('delete')}>
@@ -380,7 +380,7 @@ const McpServerCard = observer(({ server }: { server: McpServer }) => {
                 color="danger"
                 onPress={handleDelete}
               >
-                <Icon icon="mdi:delete" width="18" />
+                <Icon icon="reicon:trash" width="18" />
               </Button>
             </Tooltip>
           </div>
@@ -579,7 +579,7 @@ export const McpServersSection = observer(() => {
           <Button
             size="md"
             variant="flat"
-            startContent={<Icon icon="mdi:plus" width="20" height="20" />}
+            startContent={<Icon icon="reicon:add" width="20" height="20" />}
             onPress={handleAddServer}
             className="flex-shrink-0"
           >
@@ -589,7 +589,7 @@ export const McpServersSection = observer(() => {
           <Button
             size="md"
             color="primary"
-            startContent={<Icon icon="mdi:content-paste" width="20" height="20" />}
+            startContent={<Icon icon="reicon:clipboard" width="20" height="20" />}
             onPress={handleImportJson}
             className="flex-shrink-0"
           >

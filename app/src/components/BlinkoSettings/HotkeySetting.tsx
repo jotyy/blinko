@@ -413,7 +413,7 @@ export const HotkeySetting = observer(() => {
   return (
     <div>
       <CollapsibleCard
-        icon="material-symbols:desktop-windows"
+        icon="reicon:monitor"
         title="Desktop & Hotkeys"
         className="w-full"
       >
@@ -472,7 +472,7 @@ export const HotkeySetting = observer(() => {
                   variant={isRecording ? "flat" : "solid"}
                   onPress={toggleRecording}
                   startContent={
-                    <Icon icon={isRecording ? "material-symbols:stop" : "material-symbols:keyboard"} />
+                    <Icon icon={isRecording ? "material-symbols:stop" : "reicon:keyboard"} />
                   }
                 >
                   {isRecording ? t('hotkey.stop') : t('hotkey.record')}
@@ -486,7 +486,7 @@ export const HotkeySetting = observer(() => {
                     onPress={resetQuickNoteToDefault}
                     className="opacity-70 hover:opacity-100"
                   >
-                    <Icon icon="material-symbols:refresh" />
+                    <Icon icon="reicon:refresh" />
                   </Button>
                 )}
               </div>
@@ -499,7 +499,7 @@ export const HotkeySetting = observer(() => {
 
       {/* Quick AI CollapsibleCard */}
       <CollapsibleCard
-        icon="mingcute:ai-line"
+        icon="reicon:magic-star"
         title="Quick AI"
         className="w-full mt-6"
       >
@@ -542,7 +542,7 @@ export const HotkeySetting = observer(() => {
                   variant={isRecordingAI ? "flat" : "solid"}
                   onPress={toggleAIRecording}
                   startContent={
-                    <Icon icon={isRecordingAI ? "material-symbols:stop" : "material-symbols:keyboard"} />
+                    <Icon icon={isRecordingAI ? "material-symbols:stop" : "reicon:keyboard"} />
                   }
                 >
                   {isRecordingAI ? t('hotkey.stop') : t('hotkey.record')}
@@ -556,7 +556,7 @@ export const HotkeySetting = observer(() => {
                     onPress={resetQuickAIToDefault}
                     className="opacity-70 hover:opacity-100"
                   >
-                    <Icon icon="material-symbols:refresh" />
+                    <Icon icon="reicon:refresh" />
                   </Button>
                 )}
               </div>
@@ -569,7 +569,7 @@ export const HotkeySetting = observer(() => {
 
       {/* Text Selection Toolbar CollapsibleCard */}
       <CollapsibleCard
-        icon="material-symbols:select-all"
+        icon="reicon:checklist"
         title={t('text-selection-toolbar')}
         className="w-full my-6"
       >

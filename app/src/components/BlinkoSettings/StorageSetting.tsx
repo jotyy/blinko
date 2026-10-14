@@ -39,7 +39,7 @@ export const StorageSetting = observer(() => {
 
 
   return <CollapsibleCard
-    icon="tabler:brush"
+    icon="reicon:brush"
     title={t('storage')}
   >
     <Item
@@ -49,7 +49,7 @@ export const StorageSetting = observer(() => {
       rightContent={<div>
         <Dropdown>
           <DropdownTrigger>
-            <Button startContent={<Icon icon="mdi:storage" width="20" height="20" />} color='primary' >
+            <Button startContent={<Icon icon="reicon:server" width="20" height="20" />} color='primary' >
               {blinko.config.value?.objectStorage ?? t('local-file-system')}
             </Button>
           </DropdownTrigger>

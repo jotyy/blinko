@@ -81,7 +81,7 @@ const PluginCard = ({ name, version, displayName, description, author, downloads
           {!!downloads && downloads > 0 && (
             <div className="flex items-center gap-4 mt-1">
               <div className="flex items-center gap-1.5 text-xs text-default-500">
-                <Icon icon="mdi:download" className="text-base" />
+                <Icon icon="reicon:download" className="text-base" />
                 <span>{downloads.toLocaleString()} {t('downloads')}</span>
               </div>
             </div>
@@ -191,7 +191,7 @@ const InstalledPlugins = observer(() => {
                     size="sm"
                     isIconOnly
                     variant="flat"
-                    startContent={<Icon icon="mdi:cog" width="16" height="16" />}
+                    startContent={<Icon icon="reicon:settings" width="16" height="16" />}
                     onPress={() => {
                       const pluginInstance = pluginManager.getPluginInstanceByName(metadata.name);
                       RootStore.Get(DialogStandaloneStore).setData({
@@ -209,7 +209,7 @@ const InstalledPlugins = observer(() => {
                       size="sm"
                       color="warning"
                       isIconOnly
-                      startContent={<Icon icon="material-symbols:upgrade-rounded" width="16" height="16" />}
+                      startContent={<Icon icon="reicon:arrow-up-circle" width="16" height="16" />}
                       onPress={() => showUpgradeModal(latestPlugin)}
                       title={t('plugin-requires-app-upgrade')}
                     />
@@ -219,7 +219,7 @@ const InstalledPlugins = observer(() => {
                       color="warning"
                       isIconOnly
                       isLoading={loadingPluginName === metadata.name}
-                      startContent={<Icon icon="material-symbols:upgrade-rounded" width="16" height="16" />}
+                      startContent={<Icon icon="reicon:arrow-up-circle" width="16" height="16" />}
                       onPress={() => handleUpdate(latestPlugin)}
                     />
                   )
@@ -228,7 +228,7 @@ const InstalledPlugins = observer(() => {
                   size="sm"
                   isIconOnly
                   color="danger"
-                  startContent={<Icon icon="mdi:trash-can" width="16" height="16" />}
+                  startContent={<Icon icon="reicon:trash" width="16" height="16" />}
                   onPress={() => handleUninstall(plugin.id)}
                 />
               </div>
@@ -368,7 +368,7 @@ const AllPlugins = observer(() => {
                 size="sm"
                 color="warning"
                 className="min-w-[80px]"
-                startContent={<Icon icon="mdi:arrow-up-bold" width="16" height="16" />}
+                startContent={<Icon icon="reicon:arrow-up" width="16" height="16" />}
                 onPress={() => showUpgradeModal(plugin)}
               >
                 {t('upgrade')}
@@ -379,7 +379,7 @@ const AllPlugins = observer(() => {
                 color="primary"
                 isLoading={loadingPluginName === plugin.name}
                 className="min-w-[80px]"
-                startContent={<Icon icon="mdi:download" width="16" height="16" />}
+                startContent={<Icon icon="reicon:download" width="16" height="16" />}
                 onPress={() => handleInstall(plugin)}
               >
                 {t('install')}
@@ -444,7 +444,7 @@ const AddLocalPluginDialog = observer(({ onClose }: { onClose: () => void }) => 
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         startContent={
-          <Icon icon="mdi:link-variant" className="text-default-400 pointer-events-none flex-shrink-0" />
+          <Icon icon="reicon:link" className="text-default-400 pointer-events-none flex-shrink-0" />
         }
         className="w-full"
       />
@@ -556,7 +556,7 @@ const InstallFromGithubDialog = observer(({ onClose }: { onClose: () => void }) 
         {t('install-from-github-description')}
       </div>
       <div className="text-xs text-warning bg-warning/10 p-3 rounded-lg">
-        <Icon icon="mdi:information" className="inline mr-1" />
+        <Icon icon="reicon:info-circle" className="inline mr-1" />
         {t('github-api-limit-notice')}
       </div>
       <Input
@@ -614,7 +614,7 @@ const LocalDevelopment = observer(() => {
           color="primary"
           size="sm"
           className="px-4"
-          startContent={<Icon icon="mdi:plus" className="text-lg" />}
+          startContent={<Icon icon="reicon:add" className="text-lg" />}
           onPress={handleAddLocalPlugin}
         >
           {t('add-local-plugin')}
@@ -645,7 +645,7 @@ const LocalDevelopment = observer(() => {
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
                   <div className="flex items-center gap-1.5 text-xs text-default-400">
-                    <Icon icon="mdi:link-variant" className="text-sm" />
+                    <Icon icon="reicon:link" className="text-sm" />
                     <span>{pluginManager.devWebscoketUrl.value}</span>
                   </div>
                   <Button
@@ -653,7 +653,7 @@ const LocalDevelopment = observer(() => {
                     color="danger"
                     variant="flat"
                     className="h-6 px-2 min-w-0"
-                    startContent={<Icon icon="mdi:link-off" className="text-sm" />}
+                    startContent={<Icon icon="reicon:link-broken" className="text-sm" />}
                     onPress={handleDisconnect}
                   >
                     {t('disconnect')}
@@ -667,7 +667,7 @@ const LocalDevelopment = observer(() => {
                 color="primary"
                 isIconOnly
                 className="h-6 px-2 min-w-0"
-                startContent={<Icon icon="mdi:cog" className="text-sm" />}
+                startContent={<Icon icon="reicon:settings" className="text-sm" />}
                 onPress={() => {
                   const pluginInstance = pluginManager.getPluginInstanceByName("dev");
                   RootStore.Get(DialogStandaloneStore).setData({
@@ -694,7 +694,7 @@ export const PluginSetting = observer(() => {
   }, []);
   return (
     <CollapsibleCard
-      icon="hugeicons:plug-socket"
+      icon="reicon:plug"
       title={t('plugin-settings')}
     >
       <Tabs aria-label="Plugin settings tabs">

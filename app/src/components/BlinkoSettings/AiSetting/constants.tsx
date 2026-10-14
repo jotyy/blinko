@@ -4,14 +4,14 @@ import { ModelCapabilities } from '@server/aiServer/types';
 export { DEFAULT_MODEL_TEMPLATES, inferModelCapabilities } from '@shared/lib/modelTemplates';
 
 export const CAPABILITY_ICONS = {
-  inference: <Icon icon="hugeicons:chat" width="16" height="16" />,
-  tools: <Icon icon="hugeicons:ai-beautify" width="16" height="16" />,
-  image: <Icon icon="hugeicons:view" width="16" height="16" />,
-  imageGeneration: <Icon icon="hugeicons:image-01" width="16" height="16" />,
-  video: <Icon icon="hugeicons:video-01" width="16" height="16" />,
-  audio: <Icon icon="mingcute:voice-line" width="16" height="16" />,
-  embedding: <Icon icon="hugeicons:search-list-02" width="16" height="16" />,
-  rerank: <Icon icon="hugeicons:arrow-up-down" width="16" height="16" />
+  inference: <Icon icon="reicon:chat" width="16" height="16" />,
+  tools: <Icon icon="reicon:magic-star" width="16" height="16" />,
+  image: <Icon icon="reicon:eye" width="16" height="16" />,
+  imageGeneration: <Icon icon="reicon:gallery" width="16" height="16" />,
+  video: <Icon icon="reicon:video" width="16" height="16" />,
+  audio: <Icon icon="reicon:microphone" width="16" height="16" />,
+  embedding: <Icon icon="reicon:search" width="16" height="16" />,
+  rerank: <Icon icon="reicon:sort" width="16" height="16" />
 };
 
 export const CAPABILITY_LABELS = {

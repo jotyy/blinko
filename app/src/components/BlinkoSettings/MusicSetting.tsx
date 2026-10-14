@@ -16,7 +16,7 @@ export const MusicSetting = observer(() => {
 
   return (
     <CollapsibleCard
-      icon="mdi:music"
+      icon="reicon:music-note"
       title={t('music-settings')}
     >
       <Item

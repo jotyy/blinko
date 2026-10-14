@@ -35,13 +35,13 @@ export const DefaultModelsSection = observer(() => {
   }, []);
 
   return (
-    <CollapsibleCard icon="hugeicons:settings-02" title="Default Models Configuration">
+    <CollapsibleCard icon="reicon:settings" title="Default Models Configuration">
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Main Chat Model */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Icon icon="hugeicons:cpu" width="16" height="16" />
+              <Icon icon="reicon:cpu" width="16" height="16" />
               <label className="text-sm font-medium">Main Chat Model</label>
             </div>
             <Select
@@ -100,7 +100,7 @@ export const DefaultModelsSection = observer(() => {
           {/* Embedding Model */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Icon icon="hugeicons:database-01" width="16" height="16" />
+              <Icon icon="reicon:database" width="16" height="16" />
               <label className="text-sm font-medium">Embedding Model</label>
             </div>
             <Select
@@ -159,7 +159,7 @@ export const DefaultModelsSection = observer(() => {
           {/* Voice Model */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Icon icon="hugeicons:mic-01" width="16" height="16" />
+              <Icon icon="reicon:microphone" width="16" height="16" />
               <label className="text-sm font-medium">Voice Model</label>
             </div>
             <Select
@@ -218,7 +218,7 @@ export const DefaultModelsSection = observer(() => {
           {/* Vision Model */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Icon icon="hugeicons:view" width="16" height="16" />
+              <Icon icon="reicon:eye" width="16" height="16" />
               <label className="text-sm font-medium">Vision Model</label>
             </div>
             <Select

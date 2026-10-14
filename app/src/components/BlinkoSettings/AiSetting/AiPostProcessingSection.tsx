@@ -48,7 +48,7 @@ export const AiPostProcessingSection = observer(() => {
   };
 
   return (
-    <CollapsibleCard icon="hugeicons:ai-innovation-01" title="AI Post Processing">
+    <CollapsibleCard icon="reicon:magic-star" title="AI Post Processing">
       <Item
         leftContent={
           <ItemWithTooltip
@@ -99,19 +99,19 @@ export const AiPostProcessingSection = observer(() => {
                 size="sm"
                 className="w-[200px]"
               >
-                <SelectItem key="comment" startContent={<Icon icon="tabler:message" />}>
+                <SelectItem key="comment" startContent={<Icon icon="reicon:chat" />}>
                   {t('add-as-comment')}
                 </SelectItem>
-                <SelectItem key="tags" startContent={<Icon icon="tabler:tags" />}>
+                <SelectItem key="tags" startContent={<Icon icon="reicon:tag" />}>
                   {t('auto-add-tags')}
                 </SelectItem>
-                <SelectItem key="smartEdit" startContent={<Icon icon="tabler:robot" />}>
+                <SelectItem key="smartEdit" startContent={<Icon icon="reicon:cpu" />}>
                   {t('smart-edit')}
                 </SelectItem>
-                <SelectItem key="both" startContent={<Icon icon="tabler:analyze" />}>
+                <SelectItem key="both" startContent={<Icon icon="reicon:chart" />}>
                   {t('both')}
                 </SelectItem>
-                <SelectItem key="custom" startContent={<Icon icon="tabler:code" />}>
+                <SelectItem key="custom" startContent={<Icon icon="reicon:code" />}>
                   {t('custom')}
                 </SelectItem>
               </Select>
@@ -132,7 +132,7 @@ export const AiPostProcessingSection = observer(() => {
                         </div>
                       }
                     >
-                      <Icon icon="proicons:info" width="18" height="18" />
+                      <Icon icon="reicon:info-circle" width="18" height="18" />
                     </Tooltip>
                   </div>
                   <div className="text-[12px] text-default-400">{t('prompt-used-for-post-processing-notes')}</div>
@@ -204,7 +204,7 @@ export const AiPostProcessingSection = observer(() => {
                         </div>
                       }
                     >
-                      <Icon icon="proicons:info" width="18" height="18" />
+                      <Icon icon="reicon:info-circle" width="18" height="18" />
                     </Tooltip>
                   </div>
                   <div><Button size="sm" color="warning" className="ml-2">{t('function-call-required')}</Button></div>

@@ -16,7 +16,7 @@ export const ImportSetting = observer(() => {
   const { t } = useTranslation()
 
   return <CollapsibleCard
-    icon="tabler:file-import"
+    icon="reicon:import"
     title={t('import')}
   >
     <Item

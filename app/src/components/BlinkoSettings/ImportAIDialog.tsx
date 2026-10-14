@@ -173,14 +173,14 @@ export const ImportAIDialog = observer(({ onSelectTab }: { onSelectTab?: (tab: s
             <ModalContent className="rounded-lg">
                 <ModalHeader className="flex items-center gap-2 pb-3">
                     <div className="flex items-center gap-2">
-                        <Icon icon="hugeicons:ai-beautify" className="text-primary" width={24} height={24} />
+                        <Icon icon="reicon:magic-star" className="text-primary" width={24} height={24} />
                         <span className="text-lg font-semibold">{t('import-ai-configuration')}</span>
                     </div>
                 </ModalHeader>
                 <ModalBody className="py-4">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2 mb-2">
-                            <Icon icon="fluent:info-24-filled" className="text-primary" width={20} height={20} />
+                            <Icon icon="reicon:info-circle" className="text-primary" width={20} height={20} />
                             <p className="text-base">{t('detected-ai-configuration-to-import')}</p>
                         </div>
                         
@@ -220,7 +220,7 @@ export const ImportAIDialog = observer(({ onSelectTab }: { onSelectTab?: (tab: s
                         )}
                         
                         <div className="flex items-center gap-2 mt-2">
-                            <Icon icon="mdi:help-circle-outline" className="text-warning" width={20} height={20} />
+                            <Icon icon="reicon:help" className="text-warning" width={20} height={20} />
                             <p className="text-base">{t('would-you-like-to-import-this-configuration')}</p>
                         </div>
                     </div>
@@ -239,7 +239,7 @@ export const ImportAIDialog = observer(({ onSelectTab }: { onSelectTab?: (tab: s
                         color="primary" 
                         onPress={handleConfirm} 
                         className="px-6" 
-                        startContent={isLoading ? null : <Icon icon="material-symbols:download" width={18} height={18} />}
+                        startContent={isLoading ? null : <Icon icon="reicon:download" width={18} height={18} />}
                         isLoading={isLoading}
                         spinner={<Icon icon="line-md:loading-twotone-loop" width={24} height={24} />}
                     >

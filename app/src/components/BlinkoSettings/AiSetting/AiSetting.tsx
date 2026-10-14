@@ -54,14 +54,14 @@ export default observer(function AiSetting() {
 
   return (
     <div className='flex flex-col gap-4'>
-      <CollapsibleCard icon="hugeicons:ai-magic" title="AI Providers & Models">
+      <CollapsibleCard icon="reicon:magic-star" title="AI Providers & Models">
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <Button
               size='sm'
               className='ml-auto'
               variant="flat"
-              startContent={<Icon icon="iconamoon:cloud-add-light" width="16" height="16" />}
+              startContent={<Icon icon="reicon:cloud-plus" width="16" height="16" />}
               onPress={() => {
                 RootStore.Get(DialogStore).setData({
                   isOpen: true,
@@ -94,7 +94,7 @@ export default observer(function AiSetting() {
 
       <McpServersSection />
 
-      <CollapsibleCard icon="hugeicons:api" title="MCP Integration">
+      <CollapsibleCard icon="reicon:code-square" title="MCP Integration">
         <div className="space-y-4">
           <div className="text-sm text-default-600 mb-4">
             {t('mcp-integration-desc', 'Model Context Protocol (MCP) integration allows AI assistants to connect to Blinko and use its tools.')}
