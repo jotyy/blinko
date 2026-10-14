@@ -283,7 +283,11 @@ function App() {
         }}
       />
       <BrowserRouter>
-        <HeroUIProvider>
+        {/* disableAnimation: HeroUI's framer-motion overlays (popover, dropdown, tooltip) drop
+            out for one frame as their open spring settles on some GPU / high-DPI setups —
+            upstream behaviour, reproduced in a 48fps recording. They now appear without the
+            spring; press feedback stays, from materials.css. */}
+        <HeroUIProvider disableAnimation>
           {/* disableTransitionOnChange: no colour transitions firing at once on a theme swap.
               reducedMotion="user": both motion libraries honour the OS "Reduce motion" setting. */}
           <ThemeProvider attribute="class" enableSystem={false} disableTransitionOnChange>
