@@ -51,3 +51,7 @@ CONTRIBUTING.md
 **/target
 
 !**/dist-js/*
+# local environment files never belong in an image
+.env
+.env.*
+!.env.tmpl
