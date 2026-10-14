@@ -238,7 +238,7 @@ const Editor = observer(({ content, onChange, onSend, isSendLoading, originFiles
             store.adjustMobileEditorHeight()
           }}>
 
-          <div className={isTray ? 'composer-card bg-card rounded-[16px] shadow-[var(--heroui-box-shadow-small)] px-1 pt-1 pb-0.5' : 'contents'}>
+          <div className={isTray ? 'composer-card bg-card rounded-[16px] [box-shadow:var(--heroui-box-shadow-small)] px-1 pt-1 pb-0.5' : 'contents'}>
             <div id={`vditor-${mode}`} className={`vditor ${showTopToolbar ? 'flex-1 overflow-hidden flex flex-col fullscreen-editor' : ''}`} />
           {store.files.length > 0 && (
             <div className='w-full my-2 attachment-container'>

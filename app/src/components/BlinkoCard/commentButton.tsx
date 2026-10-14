@@ -313,15 +313,31 @@ export const SimpleCommentList = observer(({ blinkoItem }: { blinkoItem: BlinkoI
     return <div className="text-center text-gray-500 py-2">{t('no-comments-yet')}</div>;
   }
 
+  // A comment preview inside the card: markdown markers stripped so headings and emphasis read
+  // as text, at most three lines, and the whole thread one click away.
+  const plain = (md: string) =>
+    (md || '')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/(\*\*|__|\*|_|`)/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
   return (
-    <div className="bg-secondbackground rounded-lg px-1 py-2 mt-1">
+    <div className="mt-2 flex flex-col gap-1.5 border-t border-border/70 pt-2.5">
       {commentList.map((comment: Comment['items'][0]) => (
-        <div key={comment.id} className="pb-[2px] ">
-          <div className="ml-1 text-xs flex-1">
-            <span className='font-bold text-primary mr-1'> {comment.guestName || comment.account?.nickname || comment.account?.name || t('anonymous')}:</span>
-            {comment.content}
-          </div>
-        </div>
+        <button
+          type="button"
+          key={comment.id}
+          onClick={(e) => { e.stopPropagation(); ShowCommentDialog(blinkoItem.id!); }}
+          className="text-left text-[13px] leading-relaxed text-desc rounded-lg -mx-1.5 px-1.5 py-1 hover:bg-hover hover:text-foreground/80 transition-colors duration-150"
+        >
+          <span className="line-clamp-3">
+            <span className="font-medium text-foreground/80 mr-1.5">
+              {comment.guestName || comment.account?.nickname || comment.account?.name || t('anonymous')}
+            </span>
+            {plain(comment.content)}
+          </span>
+        </button>
       ))}
     </div>
   );
@@ -383,7 +399,7 @@ export const CommentButton = observer(({ blinkoItem, alwaysShow = false }: { bli
           height="15"
           className={`cursor-pointer ml-2 ${isIOSDevice
             ? 'opacity-60'
-            : `${alwaysShow ? '!text-ignore' : '!text-desc opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1'}`
+            : `${alwaysShow ? '!text-ignore' : '!text-desc opacity-0 group-hover/card:opacity-100 transition-opacity duration-150'}`
             }`}
           onClick={handleClick}
         />

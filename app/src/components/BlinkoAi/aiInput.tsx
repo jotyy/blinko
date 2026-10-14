@@ -192,7 +192,7 @@ export const AiInput = observer(({ onSubmit, className, withoutOutline }: AiInpu
         )}
       >
         {/* Card */}
-        <div className={cn(CARD_RADIUS, 'bg-card shadow-[var(--heroui-box-shadow-small)]')}>
+        <div className={cn(CARD_RADIUS, 'bg-card [box-shadow:var(--heroui-box-shadow-small)]')}>
           <Textarea
             data-focus-visible="false"
             autoFocus

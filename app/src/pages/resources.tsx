@@ -186,7 +186,7 @@ const Page = observer(() => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="my-2 bg-card rounded-[16px] shadow-[var(--heroui-box-shadow-small)] overflow-hidden divide-y divide-border/70"
+                    className="my-2 bg-card rounded-[16px] [box-shadow:var(--heroui-box-shadow-small)] overflow-hidden divide-y divide-border/70"
                   >
                     {resources.map((item, index) => (
                       <MemoizedResourceItem

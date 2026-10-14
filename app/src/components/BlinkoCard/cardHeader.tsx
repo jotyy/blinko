@@ -93,7 +93,7 @@ export const CardHeader = observer(({ blinkoItem, blinko, isShareMode, isExpande
             >
               <Icon
                 icon={blinkoItem.isArchived ? "solar:refresh-circle-bold" : "mdi:circle-outline"}
-                className={`${blinkoItem.isArchived ? 'text-blue-500' : 'text-green-500'} hover:opacity-80`}
+                className={`${blinkoItem.isArchived ? 'text-primary' : 'text-desc hover:text-primary'} transition-colors duration-150`}
                 width="16"
                 height="16"
               />
@@ -121,7 +121,7 @@ export const CardHeader = observer(({ blinkoItem, blinko, isShareMode, isExpande
           size={16}
           className={`ml-auto ${isIOSDevice
             ? 'opacity-100'
-            : 'opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1'
+            : 'opacity-0 group-hover/card:opacity-100 transition-opacity duration-150'
             }`}
           content={blinkoItem.content + `\n${blinkoItem.attachments?.map(i => window.location.origin + i.path).join('\n')}`}
         />
@@ -133,7 +133,7 @@ export const CardHeader = observer(({ blinkoItem, blinko, isShareMode, isExpande
             <div className="flex items-center gap-2">
               <Icon onClick={e => {
                 window.open(window.location.origin + `/api/rss/${blinkoItem.accountId}/atom?row=20`)
-              }} icon="mingcute:rss-2-fill" className='opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 ml-2 cursor-pointer hover:text-primary' width="16" height="16" />
+              }} icon="mingcute:rss-2-fill" className='opacity-0 group-hover/card:opacity-100 transition-opacity duration-150 ml-2 cursor-pointer hover:text-primary' width="16" height="16" />
             </div>
           </Tooltip>
         )}
@@ -146,7 +146,7 @@ export const CardHeader = observer(({ blinkoItem, blinko, isShareMode, isExpande
         {!isShareMode && !!blinkoItem._count?.histories && blinkoItem._count?.histories > 0 && (
           <HistoryButton
             noteId={blinkoItem.id!}
-            className={'opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 ml-2 cursor-pointer hover:text-primary text-desc mt-[1px]'}
+            className={'opacity-0 group-hover/card:opacity-100 transition-opacity duration-150 ml-2 cursor-pointer hover:text-primary text-desc mt-[1px]'}
           />
         )}
 
@@ -157,7 +157,7 @@ export const CardHeader = observer(({ blinkoItem, blinko, isShareMode, isExpande
               icon="mingcute:delete-2-line"
               width={iconSize}
               height={iconSize}
-              className={`opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 ml-2 cursor-pointer hover:text-red-500 text-desc ${blinkoItem.isRecycle ? 'text-red-500 opacity-100' : ''}`}
+              className={`opacity-0 group-hover/card:opacity-100 transition-[opacity,color] duration-150 ml-2 cursor-pointer hover:text-danger text-desc ${blinkoItem.isRecycle ? 'text-danger opacity-100' : ''}`}
               onClick={(e) => {
                 e.stopPropagation();
                 PromiseCall(api.notes.trashMany.mutate({ ids: [blinkoItem.id!] })).then(() => {
@@ -170,7 +170,7 @@ export const CardHeader = observer(({ blinkoItem, blinko, isShareMode, isExpande
 
         {blinkoItem.isTop && (
           <Icon
-            className={isIOSDevice ? 'ml-[10px] text-[#EFC646]' : "ml-auto group-hover/card:ml-2 text-[#EFC646]"}
+            className={isIOSDevice ? 'ml-[10px] text-[#EFC646]' : "ml-2 text-[#EFC646]"}
             icon="solar:bookmark-bold"
             width={iconSize}
             height={iconSize}
@@ -179,7 +179,7 @@ export const CardHeader = observer(({ blinkoItem, blinko, isShareMode, isExpande
 
         {!isShareMode && (
           <LeftCickMenu
-            className={isIOSDevice ? 'ml-[10px]' : (blinkoItem.isTop ? "ml-[10px]" : 'ml-auto group-hover/card:ml-2')}
+            className={isIOSDevice ? 'ml-[10px]' : 'ml-2'}
             onTrigger={() => { blinko.curSelectedNote = _.cloneDeep(blinkoItem) }}
           />
         )}
@@ -200,7 +200,7 @@ const ShareButton = observer(({ blinkoItem, isIOSDevice }: { blinkoItem: Note, i
           height="16"
           className={`cursor-pointer text-desc ml-2 ${isIOSDevice
             ? 'opacity-100'
-            : 'opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 translate-x-1'
+            : 'opacity-0 group-hover/card:opacity-100 transition-opacity duration-150'
             }`}
           onClick={async (e) => {
             e.stopPropagation()

@@ -120,10 +120,11 @@ export const BlinkoCard = observer(({ blinkoItem, account, isShareMode = false, 
               onContextMenu={e => !isPc && e.stopPropagation()}
               shadow='none'
               className={`
-                flex flex-col p-4 ${glassEffect ? 'bg-transparent' : 'bg-background'} !transition-all group/card
-                ${isPc && !blinkoItem.isShare && !withoutHoverAnimation ? 'hover:translate-y-1' : ''}
+                flex flex-col p-4 rounded-[14px] ${glassEffect ? 'bg-transparent' : 'bg-card [box-shadow:var(--heroui-box-shadow-small)]'}
+                transition-shadow duration-150 ease-out group/card
+                ${isPc && !blinkoItem.isShare && !withoutHoverAnimation && !glassEffect ? 'hover:[box-shadow:var(--heroui-box-shadow-medium)]' : ''}
                 ${blinkoItem.isBlog ? 'cursor-pointer' : ''}
-                ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'border-2 border-primary' : ''}
+                ${blinko.curMultiSelectIds?.includes(blinkoItem.id!) ? 'ring-2 ring-inset ring-primary' : ''}
                 ${className}
               `}
             >
