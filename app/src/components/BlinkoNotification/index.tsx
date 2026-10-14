@@ -93,7 +93,7 @@ export const BlinkoNotification = observer(() => {
             isInvisible={!store.unreadCount.value}
             shape="circle"
           >
-            <Icon icon="mi:notification" width="24" height="24" />
+            <Icon icon="mi:notification" width="18" height="18" className="text-desc" />
           </Badge>
         </Button>
       </PopoverTrigger>

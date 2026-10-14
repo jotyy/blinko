@@ -145,7 +145,14 @@ export interface IconCollection {
       
       // Load icon data from Iconify JSON
       try {
-        const fullIconsPath = require.resolve(`@iconify/json/json/${collection}.json`);
+        // The full @iconify/json bundle first; then the per-collection package
+        // (e.g. @iconify-json/reicon), for sets newer than the bundle.
+        let fullIconsPath;
+        try {
+          fullIconsPath = require.resolve(`@iconify/json/json/${collection}.json`);
+        } catch {
+          fullIconsPath = require.resolve(`@iconify-json/${collection}/icons.json`);
+        }
         const iconsData = JSON.parse(fs.readFileSync(fullIconsPath, 'utf8'));
         
         // Create a new icon data object

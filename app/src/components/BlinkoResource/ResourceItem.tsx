@@ -108,10 +108,11 @@ interface ResourceCardProps {
 }
 
 const getCardClassName = (isDragging?: boolean, isDraggingOver?: boolean) => {
-  const baseClasses = 'mb-2 p-4 hover:bg-hover bg-background !transition-all duration-200';
+  // A row inside the grouped list (the list draws the card and the dividers).
+  const baseClasses = 'px-4 py-2.5 rounded-none bg-transparent hover:bg-hover transition-colors duration-150';
 
   if (isDraggingOver) {
-    return `${baseClasses} relative overflow-visible ring-2 ring-primary/30 bg-primary/10`;
+    return `${baseClasses} relative overflow-visible ring-2 ring-inset ring-primary/30 bg-primary/10`;
   }
 
   if (isDragging) {

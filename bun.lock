@@ -119,6 +119,7 @@
       },
       "devDependencies": {
         "@headlessui/tailwindcss": "^0.2.2",
+        "@iconify-json/reicon": "^1.2.6",
         "@iconify/json": "^2.2.331",
         "@tailwindcss/typography": "^0.5.16",
         "@tauri-apps/cli": "2.5.0",
@@ -954,6 +955,8 @@
     "@humanwhocodes/object-schema": ["@humanwhocodes/object-schema@2.0.3", "", {}, "sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA=="],
 
     "@ibm-cloud/watsonx-ai": ["@ibm-cloud/watsonx-ai@1.7.0", "", { "dependencies": { "@types/node": "^18.0.0", "extend": "3.0.2", "form-data": "^4.0.4", "ibm-cloud-sdk-core": "^5.4.3" } }, "sha512-TmLaoFXmLc7yVFJIQS25mzZcuWfju4JmRXcO62KthDKNENyPpXXJukrHN6gXfv1BotzFt0M2kyRnO1Vt8ZLlxQ=="],
+
+    "@iconify-json/reicon": ["@iconify-json/reicon@1.2.6", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-3bfSub7MTlKtVLC5TcrVgpUVitvZ/TDF/ZSOk+7jyHMFveLyy0qLBTNtu9fAq808FcxnohPNbuMBW4ddVnqxGg=="],
 
     "@iconify/json": ["@iconify/json@2.2.400", "", { "dependencies": { "@iconify/types": "*", "pathe": "^2.0.3" } }, "sha512-L8cy1YE/H0LFO4Pu7hfyylkrQmawL8sTOCH2PcBDydWA1FpoKijeIzweRJ6e9grvn2li9Yu+Pe32Jq9x4MKpaw=="],
 

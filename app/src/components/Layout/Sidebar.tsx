@@ -92,7 +92,7 @@ export const Sidebar = observer(({ onItemClick }: SidebarProps) => {
       </div>
 
       <ScrollShadow className="-mr-[16px] mt-[-5px] h-full max-h-full pr-6 hide-scrollbar">
-        <div className={`flex flex-col gap-1 mt-4 font-semibold ${base.isSidebarCollapsed ? 'items-center gap-4' : ''}`}>
+        <div className={`flex flex-col gap-0.5 mt-4 font-medium ${base.isSidebarCollapsed ? 'items-center gap-4' : ''}`}>
           {base.routerList
             .filter((i) => !i.hiddenSidebar)
             .map((i) => (
@@ -103,20 +103,16 @@ export const Sidebar = observer(({ onItemClick }: SidebarProps) => {
                   base.currentRouter = i;
                   onItemClick?.();
                 }}
-                className={`flex items-center gap-1 group ${SideBarItem} ${base.isSideBarActive(routerInfo, i) ? '!bg-primary  !text-primary-foreground' : ''}`}
+                className={`flex items-center gap-1 group ${SideBarItem} ${base.isSideBarActive(routerInfo, i) ? 'is-active !bg-primary/12 !text-primary' : 'text-foreground/85 hover:text-foreground'}`}
               >
-                <Icon className={`${base.isSidebarCollapsed ? 'mx-auto' : ''}`} icon={i.icon} width="20" height="20" />
-                {!base.isSidebarCollapsed && <span className="!transition-all">{t(i.title)}</span>}
+                <Icon className={`${base.isSidebarCollapsed ? 'mx-auto' : ''} text-desc group-hover:text-foreground group-[.is-active]:!text-primary transition-colors duration-150`} icon={i.icon} width="18" height="18" />
+                {!base.isSidebarCollapsed && <span className="text-[14px]">{t(i.title)}</span>}
               </Link>
             ))}
           {!base.isSidebarCollapsed && blinkoStore.tagList.value?.listTags.length != 0 && blinkoStore.tagList.value?.listTags && <TagListPanel />}
         </div>
       </ScrollShadow>
 
-      {/* ***** background *****  */}
-      <div className="halation absolute inset-0 h-[250px] w-[250px] overflow-hidden blur-3xl z-[0] pointer-events-none">
-        <div className="w-full h-[100%] bg-[#ffc65c] opacity-20" style={{ clipPath: 'circle(35% at 50% 50%)' }} />
-      </div>
     </div>
   );
 });

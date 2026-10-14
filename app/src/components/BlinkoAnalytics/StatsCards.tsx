@@ -31,30 +31,26 @@ const gradients = [
   "from-[#FEE140] via-[#FA709A] to-[#FF8177]"
 ]
 
-const StatCard = ({ label, value, delay = 0, gradient, icon }: StatCardProps) => {
+// One quiet card per figure: the label in secondary text, the number in the body colour with
+// tabular figures. `gradient` is kept in the props for callers but no longer painted.
+const StatCard = ({ label, value, delay = 0, icon }: StatCardProps) => {
   return (
-    <Card className="bg-background" shadow="none">
-      <CardBody>
-        <div className="flex items-center gap-2">
-          <Icon icon={icon} className="w-5 h-5" />
-          <p className="text-tiny uppercase font-bold">{label}</p>
+    <Card className="bg-card" shadow="sm" radius="lg">
+      <CardBody className="gap-1.5 px-4 py-3.5">
+        <div className="flex items-center gap-1.5 text-desc">
+          <Icon icon={icon} width="15" height="15" />
+          <p className="text-[12px] font-medium">{label}</p>
         </div>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <motion.p
             key={value}
-            className={`text-4xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ 
-              duration: 0.3, 
-              delay: delay,
-              type: "spring",
-              stiffness: 200,
-              damping: 20
-            }}
+            className="text-[28px] leading-none font-semibold tracking-[-0.02em] tabular-nums text-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: 'easeOut', delay }}
           >
-            {value}
+            {value.toLocaleString()}
           </motion.p>
         </AnimatePresence>
       </CardBody>

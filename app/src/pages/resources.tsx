@@ -108,7 +108,7 @@ const Page = observer(() => {
               >
                 <Button
                   size="sm"
-                  color="primary"
+                  variant="flat"
                   onPress={resourceStore.handleNewFolder}
                   startContent={<Icon icon="material-symbols:create-new-folder-outline" className="w-5 h-5" />}
                 >
@@ -186,7 +186,7 @@ const Page = observer(() => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="py-2 min-h-[200px]"
+                    className="my-2 bg-card rounded-[16px] shadow-[var(--heroui-box-shadow-small)] overflow-hidden divide-y divide-border/70"
                   >
                     {resources.map((item, index) => (
                       <MemoizedResourceItem

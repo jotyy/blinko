@@ -63,6 +63,8 @@ export const BarSearchInput = observer(({ isPc }: BarSearchInputProps) => {
     );
   };
 
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
   const handleGlobalSearch = () => {
     // Emit an event that will be caught by the CommonLayout to open the global search
     eventBus.emit('open-global-search');
@@ -96,19 +98,33 @@ export const BarSearchInput = observer(({ isPc }: BarSearchInputProps) => {
         </motion.div>
       ) : (
         <div className="hidden md:flex items-center relative">
-          <Button size="sm" variant="light" onPress={() => setIsGlobalSearchOpen(true)} className={`${!hasActiveFilters() ? 'w-[170px]' : 'w-auto min-w-[120px] max-w-[250px]'} justify-center flex gap-1 px-3 border-2 border-desc`}>
-            <Icon className="text-default-500 mr-1" icon="lets-icons:search" width="16" height="16" />
-            <span className={`${localSearchText.length > 0 ? 'text-primary-foreground bg-primary rounded-md px-2' : 'text-default-500'} truncate mr-auto`}>{localSearchText.length > 0 ? localSearchText : t('search')}</span>
-            {localSearchText && <Icon icon="ph:x-bold" width="14" height="14" className="ml-1 p-0 hover:text-danger transition-colors" onClick={handleClearSearch} />}
-
-            {!localSearchText && (
-              <div className="flex items-center gap-1 ml-2">
-                <kbd className="px-1.5 py-0.5 bg-default-100 rounded text-default-600 text-xs">Ctrl</kbd>
-                <span className="text-default-600">+</span>
-                <kbd className="px-1.5 py-0.5 bg-default-100 rounded text-default-600 text-xs">K</kbd>
-              </div>
+          {/* A soft pill: light fill, hairline edge, the shortcut as one keycap. */}
+          <button
+            type="button"
+            onClick={() => setIsGlobalSearchOpen(true)}
+            className={`${!hasActiveFilters() ? 'w-[200px]' : 'w-auto min-w-[140px] max-w-[260px]'} group flex items-center gap-2 h-[32px] pl-3 pr-1.5 rounded-full border border-border bg-muted/60 hover:bg-hover text-[13px] text-desc transition-colors duration-150`}
+          >
+            <Icon icon="lets-icons:search" width="15" height="15" className="shrink-0" />
+            {localSearchText.length > 0 ? (
+              <span className="truncate mr-auto px-2 py-0.5 rounded-full bg-primary/12 text-primary font-medium">{localSearchText}</span>
+            ) : (
+              <span className="truncate mr-auto">{t('search')}</span>
             )}
-          </Button>
+            {localSearchText ? (
+              <span
+                role="button"
+                aria-label={t('clear', { defaultValue: 'Clear' })}
+                className="grid place-items-center size-6 rounded-full hover:bg-black/5 dark:hover:bg-white/10"
+                onClick={handleClearSearch}
+              >
+                <Icon icon="ph:x-bold" width="12" height="12" />
+              </span>
+            ) : (
+              <kbd className="shrink-0 h-[22px] px-1.5 grid place-items-center rounded-md border border-border bg-background text-[11px] font-medium text-desc font-sans tabular-nums">
+                {isMac ? '⌘K' : 'Ctrl K'}
+              </kbd>
+            )}
+          </button>
         </div>
       )}
     </>

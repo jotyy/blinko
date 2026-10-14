@@ -247,7 +247,7 @@ export class UserStore implements Store {
     handleFeatureRoute('ai', 'useAI', {
       title: "AI",
       href: '/ai',
-      icon: 'hugeicons:ai-beautify'
+      icon: 'reicon:magic-star-filled'
     }, 'isUseAIInitialized');
 
     handleFeatureRoute('hub', 'hubEnabled', {

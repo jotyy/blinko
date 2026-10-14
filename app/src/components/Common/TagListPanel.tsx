@@ -121,7 +121,7 @@ export const TagListPanel = observer(() => {
           handleSelect,
         }) => (
           <div {...getNodeProps()} style={{ paddingLeft: `calc(${LEVEL_INDENT_REM * (level - 1)}rem + 6px)` }} >
-            <div className={`${SideBarItem} relative group ${(isSelected(element.id)) ? 'is-selected !bg-primary !text-primary-foreground' : ''}`}
+            <div className={`${SideBarItem} relative group ${(isSelected(element.id)) ? 'is-selected !bg-primary/12 !text-primary' : ''}`}
               onClick={e => {
                 //@ts-ignore
                 base.currentRouter = blinko.allTagRouter
@@ -146,7 +146,7 @@ export const TagListPanel = observer(() => {
                 </div>
               )}
 
-              <div className="truncate overflow-hidden whitespace-nowrap font-medium" title={element.name}>
+              <div className="truncate overflow-hidden whitespace-nowrap font-medium text-[14px]" title={element.name}>
                 {element.name}
                 {isBranch && element.children?.length > 0 && (
                   <span className="ml-1 text-xs tabular-nums text-desc group-[.is-selected]:text-current group-[.is-selected]:opacity-70">({element.children.length})</span>

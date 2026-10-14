@@ -123,9 +123,8 @@ export const CommonLayout = observer(({ children, header }: { children?: React.R
             )}
             <div className="flex flex-1 items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-[4px] h-[16px] bg-primary rounded-xl hidden md:block" />
                 <div className="flex flex-row items-center gap-1">
-                  <div className="font-black select-none">
+                  <div className="select-none text-[17px] font-semibold tracking-[-0.01em] text-foreground">
                     {location.pathname == '/ai'
                       ? !!RootStore.Get(AiStore).currentConversation.value?.title
                         ? RootStore.Get(AiStore).currentConversation.value?.title
@@ -133,16 +132,17 @@ export const CommonLayout = observer(({ children, header }: { children?: React.R
                       : t(base.currentTitle)}
                   </div>
                   {searchParams.get('path') != 'trash' ? (
-                    <Icon
-                      className="cursor-pointer hover:rotate-180 !transition-all hidden md:block"
+                    <button
+                      type="button"
+                      aria-label={t('refresh', { defaultValue: 'Refresh' })}
+                      className="hidden md:grid place-items-center size-[28px] rounded-full text-desc hover:text-foreground hover:bg-hover transition-colors duration-150"
                       onClick={() => {
                         blinkoStore.refreshData();
                         blinkoStore.updateTicker++;
                       }}
-                      icon="fluent:arrow-sync-12-filled"
-                      width="20"
-                      height="20"
-                    />
+                    >
+                      <Icon icon="fluent:arrow-sync-12-filled" width="15" height="15" />
+                    </button>
                   ) : (
                     <Icon
                       className="cursor-pointer !transition-all text-red-500"
@@ -176,20 +176,14 @@ export const CommonLayout = observer(({ children, header }: { children?: React.R
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center justify-center gap-2 md:gap-4 w-auto ">
+              <div className="flex items-center justify-center gap-1 md:gap-1.5 w-auto">
                 <BarSearchInput isPc={isPc} />
                 <FilterPop />
-                {!blinkoStore.config.value?.isCloseDailyReview && <Badge size="sm" className="shrink-0" content={blinkoStore.dailyReviewNoteList.value?.length} color="warning">
+                {!blinkoStore.config.value?.isCloseDailyReview && <Badge size="sm" className="shrink-0" content={blinkoStore.dailyReviewNoteList.value?.length} isInvisible={!blinkoStore.dailyReviewNoteList.value?.length} color="warning">
                   <Link to="/review">
-                    <Button
-                      as="a"
-                      className="mt-[2px]"
-                      isIconOnly
-                      size="sm"
-                      variant="light"
-                    >
-                      <Icon className="cursor-pointer text-default-600" icon="tabler:bulb" width="24" height="24" />
-                    </Button>
+                    <span className="grid place-items-center size-[32px] rounded-full text-desc hover:text-foreground hover:bg-hover transition-colors duration-150" aria-label={t('daily-review', { defaultValue: 'Daily review' })}>
+                      <Icon icon="tabler:bulb" width="18" height="18" />
+                    </span>
                   </Link>
                 </Badge>}
                 <BlinkoNotification />
@@ -204,9 +198,6 @@ export const CommonLayout = observer(({ children, header }: { children?: React.R
         {/* backdrop  pt-6 -mt-6 to fix the editor tooltip position */}
         <ScrollArea onBottom={() => { }} className={`${isPc ? 'h-[calc(100%_-_70px)]' : 'h-full'} !overflow-y-auto overflow-x-hidden mt-[-4px]`}>
           <div className="relative flex h-full w-full flex-col rounded-medium layout-container">
-            <div className="hidden md:block absolute top-[-37%] right-[5%] z-[0] h-[350px] w-[350px] overflow-hidden blur-3xl ">
-              <div className="w-full h-[356px] bg-[#9936e6] opacity-20" style={{ clipPath: 'circle(50% at 50% 50%)' }} />
-            </div>
             {children}
           </div>
         </ScrollArea>

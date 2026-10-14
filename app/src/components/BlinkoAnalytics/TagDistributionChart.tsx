@@ -41,13 +41,13 @@ export const TagDistributionChart = observer(({ tagStats }: TagDistributionChart
         top: isMobile ? 'bottom' : 'center',
         bottom: isMobile ? 0 : undefined,
         textStyle: {
-          color: isDark ? '#fff' : '#000',
-          fontSize: isMobile ? 12 : 14
+          color: isDark ? '#a19b90' : '#6f6b63',
+          fontSize: isMobile ? 12 : 13
         },
         pageTextStyle: {
-          color: isDark ? '#fff' : '#000'
+          color: isDark ? '#a19b90' : '#6f6b63'
         },
-        pageIconColor: isDark ? '#fff' : '#000',
+        pageIconColor: isDark ? '#ebe7de' : '#1d1c1a',
         pageIconInactiveColor: isDark ? '#666' : '#aaa'
       },
       series: [
@@ -58,26 +58,28 @@ export const TagDistributionChart = observer(({ tagStats }: TagDistributionChart
           center: isMobile ? ['50%', '40%'] : ['40%', '50%'],
           avoidLabelOverlap: true,
           itemStyle: {
-            borderRadius: 10,
-            borderColor: isDark ? '#1f1f1f' : '#ffffff',
+            borderRadius: 8,
+            borderColor: isDark ? '#201f1c' : '#fffefb',
             borderWidth: 2
           },
           label: {
             show: !isMobile,
             position: 'outer',
             formatter: '{b}\n{d}%',
-            color: isDark ? '#fff' : '#000'
+            color: isDark ? '#ebe7de' : '#1d1c1a',
+            fontSize: 12,
+            lineHeight: 16
           },
           emphasis: {
             label: {
               show: true,
-              fontSize: isMobile ? 12 : 14,
-              fontWeight: 'bold'
+              fontSize: isMobile ? 12 : 13,
+              fontWeight: 600
             },
             itemStyle: {
-              shadowBlur: 10,
+              shadowBlur: 8,
               shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+              shadowColor: 'rgba(29, 28, 26, 0.18)'
             }
           },
           labelLine: {
@@ -92,11 +94,11 @@ export const TagDistributionChart = observer(({ tagStats }: TagDistributionChart
           }))
         }
       ],
-      color: [
-        '#FF6B6B', '#4ECDC4', '#45B7D1', '#08AEEA', 
-        '#2AF598', '#4FACFE', '#FF9A8B', '#FF6A88',
-        '#A9C9FF', '#FEE140'
-      ]
+      // Muted, paper-theme palette: ink green, terracotta, amber, slate, sage, clay, plum, olive,
+      // sand, teal grey. Lifted a step for the dark theme.
+      color: isDark
+        ? ['#7fb8a8', '#d98a64', '#d9b26a', '#8fa0b2', '#a8c3ab', '#e0a588', '#a98aa6', '#b3b37a', '#d8c7a8', '#7fa9b0']
+        : ['#2f6b5e', '#b4613a', '#c99a3c', '#5b6b7a', '#8aa68f', '#c98468', '#7a5c78', '#8a8a4e', '#b8a585', '#4f7f87']
     }
 
     chart.setOption(option)
@@ -139,9 +141,9 @@ export const TagDistributionChart = observer(({ tagStats }: TagDistributionChart
   }, [tagStats, theme, t])
 
   return (
-    <Card className="bg-background col-span-full" shadow="none">
+    <Card className="bg-card col-span-full" shadow="sm" radius="lg">
       <CardBody>
-        <p className="text-tiny uppercase font-bold mb-4">{t('tag-distribution')}</p>
+        <h2 className="text-lg font-medium mb-4">{t('tag-distribution')}</h2>
         <div ref={chartRef} className="w-full h-[500px] md:h-[400px]" />
       </CardBody>
     </Card>
