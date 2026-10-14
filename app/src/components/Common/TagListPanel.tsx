@@ -19,21 +19,28 @@ import { DialogStore } from "@/store/module/Dialog";
 import { AiStore } from "@/store/aiStore";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
+// Every tag icon, whatever its source, renders at one optical size: an Iconify glyph at 18px,
+// an emoji character at 16px (emoji carry their own built-in padding), the fallback # at 18px.
 const Emoji = ({ icon }: { icon: string }) => {
-  return <>
-    {
-      icon ? <>
-        {
-          // @ts-ignore
-          icon?.includes(':') ?
-            // @ts-ignore
-            <Icon icon={icon} width="22" height="22" /> :
-            icon
-        }
-      </> : <Icon icon="mingcute:hashtag-line" width="20" height="20" />
-    }
-  </>
+  if (!icon) return <Icon icon="mingcute:hashtag-line" width="18" height="18" />
+  if (icon.includes(':')) return <Icon icon={icon} width="18" height="18" />
+  return <span className="text-[16px] leading-none">{icon}</span>
 }
+
+// The fixed slot every row's leading glyph sits in, so names line up across branches and leaves.
+const ICON_SLOT = 'grid place-items-center size-6 shrink-0'
+// Indent per level = slot (1.5rem) + row gap (0.5rem), so a child's icon sits exactly under its
+// parent's name. In rem, so it tracks the root font size the same way the slot does.
+const LEVEL_INDENT_REM = 2
+
+// Disclosure triangle drawn for its slot: vertically symmetric about the centre line, and the
+// right-pointing shape sits ~0.5px toward its point so its visual mass, not its box, is centred.
+const Caret = ({ expanded }: { expanded: boolean }) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"
+    className={`transition-transform duration-150 ease-out motion-reduce:transition-none ${expanded ? 'rotate-90' : ''}`}>
+    <path d="M6.25 4.5 L10.75 8 L6.25 11.5 Z" fill="currentColor" stroke="currentColor" strokeWidth="1.25" strokeLinejoin="round" />
+  </svg>
+)
 
 const ShowEmojiPicker = (element, theme) => {
   RootStore.Get(DialogStore).setData({
@@ -91,7 +98,8 @@ export const TagListPanel = observer(() => {
   useEffect(() => { }, [blinko.noteListFilterConfig.tagId])
   return (
     <>
-      <div className="ml-2 my-2 text-xs font-bold text-primary">{t('total-tags')}</div>
+      {/* Section heading: quiet secondary text, left edge aligned with the rows' icon slot. */}
+      <div className="pl-[14px] mt-3 mb-1 text-[11px] font-semibold tracking-[0.02em] text-desc">{t('total-tags')}</div>
       <TreeView
         className="mb-4"
         data={flattenTree({
@@ -112,8 +120,8 @@ export const TagListPanel = observer(() => {
           level,
           handleSelect,
         }) => (
-          <div {...getNodeProps()} style={{ paddingLeft: 20 * (level - 1) + 6 }} >
-            <div className={`${SideBarItem}relative group ${(isSelected(element.id)) ? '!bg-primary !text-primary-foreground' : ''}`}
+          <div {...getNodeProps()} style={{ paddingLeft: `calc(${LEVEL_INDENT_REM * (level - 1)}rem + 6px)` }} >
+            <div className={`${SideBarItem} relative group ${(isSelected(element.id)) ? 'is-selected !bg-primary !text-primary-foreground' : ''}`}
               onClick={e => {
                 //@ts-ignore
                 base.currentRouter = blinko.allTagRouter
@@ -122,37 +130,38 @@ export const TagListPanel = observer(() => {
               }}
             >
               {isBranch ? (
-                <div className="flex items-center justify-center h-[24px]">
-                  <div className="flex items-center justify-center group-hover:opacity-100 opacity-0 w-0 h-0 group-hover:w-[24px] group-hover:h-[24px] !transition-all" >
-                    {isExpanded ?
-                      <Icon icon="gravity-ui:caret-down" className="!transition-all" width="20" height="20" />
-                      : <Icon icon="gravity-ui:caret-right" className="!transition-all" width="20" height="20" />
-                    }
+                // One fixed slot: the tag icon and the disclosure caret are stacked and
+                // cross-fade on hover, so the row never reflows.
+                <div className={`relative ${ICON_SLOT}`}>
+                  <div className="col-start-1 row-start-1 grid place-items-center opacity-100 group-hover:opacity-0 transition-opacity duration-150">
+                    <Emoji icon={element.metadata?.icon as string} />
                   </div>
-                  <div className="group-hover:opacity-0 opacity-100 w-[24px] group-hover:w-0 !transition-all">
-                    {
-                      element.metadata?.icon ? <Emoji icon={element.metadata?.icon as string} />
-                        : <Icon icon="mingcute:hashtag-line" width="20" height="20" />
-                    }
+                  <div className="col-start-1 row-start-1 grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity duration-150 text-desc group-[.is-selected]:text-current group-[.is-selected]:opacity-70">
+                    <Caret expanded={isExpanded} />
                   </div>
                 </div>
               ) : (
-                <div>
+                <div className={ICON_SLOT}>
                   <Emoji icon={element.metadata?.icon as string} />
                 </div>
               )}
 
-              <div className="truncate overflow-hidden whitespace-nowrap" title={element.name}>
+              <div className="truncate overflow-hidden whitespace-nowrap font-medium" title={element.name}>
                 {element.name}
                 {isBranch && element.children?.length > 0 && (
-                  <span className="ml-1 text-xs opacity-60">({element.children.length})</span>
+                  <span className="ml-1 text-xs tabular-nums text-desc group-[.is-selected]:text-current group-[.is-selected]:opacity-70">({element.children.length})</span>
                 )}
               </div>
               <Dropdown>
                 <DropdownTrigger>
-                  <div className="ml-auto group-hover:opacity-100 opacity-0 !transition-all group-hover:translate-x-0 translate-x-2">
-                    <Icon icon="ri:more-fill" width="20" height="20" />
-                  </div>
+                  <button
+                    type="button"
+                    aria-label="Tag actions"
+                    onClick={e => e.stopPropagation()}
+                    className="ml-auto grid place-items-center size-7 -my-1 -mr-1 rounded-lg opacity-0 group-hover:opacity-100 focus-visible:opacity-100 data-[open=true]:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition-[opacity,background-color] duration-150"
+                  >
+                    <Icon icon="ri:more-fill" width="18" height="18" />
+                  </button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
                   {

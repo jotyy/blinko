@@ -1,0 +1,162 @@
+/*
+ * Paper theme — this fork's visual layer.
+ *
+ * Only overrides the CSS variables globals.css already defines, so upstream's stylesheet stays
+ * untouched and merges stay clean. Structure (type scale, soft radii, faint shadows, a warm paper
+ * ground) is the direction; the palette is our own.
+ *
+ * Fonts (all SIL OFL 1.1, via Fontsource):
+ *   Spline Sans    — UI and body text
+ *   IBM Plex Serif — headings, note titles
+ *   Fragment Mono  — tags, timestamps, code
+ */
+@import "@fontsource-variable/spline-sans/index.css";
+@import "@fontsource/ibm-plex-serif/400.css";
+@import "@fontsource/ibm-plex-serif/500.css";
+@import "@fontsource/ibm-plex-serif/600.css";
+@import "@fontsource/ibm-plex-serif/400-italic.css";
+@import "@fontsource/fragment-mono/400.css";
+@import "./materials.css";
+
+:root {
+  --font-family: "Spline Sans Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Spline Sans runs heavy at its named weights; the variable axis lets emphasis land a step
+     lighter. Tailwind v4's font-* utilities (and HeroUI's) read these. */
+  --font-weight-medium: 480;
+  --font-weight-semibold: 560;
+  --font-weight-bold: 640;
+  --font-serif: "IBM Plex Serif", ui-serif, Georgia, serif;
+  --font-mono: "Fragment Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Paper ground: a little cooler and greyer than pure cream, so long reading stays calm. */
+  --background: #fdfcf8;
+  --secondbackground: #f6f3ec;
+  --foreground: #1d1c1a;
+  --card: #fffefb;
+  --card-foreground: #1d1c1a;
+  --popover: #fffefb;
+  --popover-foreground: #1d1c1a;
+
+  --desc: #6f6b63;
+  --ignore: #b3aea4;
+  --muted: #efebe2;
+  --muted-foreground: #6f6b63;
+  --hover: #ece7dc;
+  --hover-foreground: #4a463f;
+
+  --border: #e6e1d6;
+  --input: #e6e1d6;
+  --ring: #2f6b5e;
+
+  /* Ink green as the one accent: buttons, links, focus. */
+  --primary: #2f6b5e;
+  --primary-foreground: #fbfaf6;
+  --secondary: #b4613a;
+  --secondary-foreground: #fffaf4;
+  --accent: #e9f0ec;
+  --accent-foreground: #1f4a40;
+  --destructive: #c2412d;
+  --destructive-foreground: #fffaf6;
+
+  --tag: #8a5a2b;
+  --tag-foreground: #f6ede2;
+  --scrollbar: #d9d3c6;
+  --header: rgb(253 252 248 / 0.88);
+
+  --radius: 0.875rem;
+  --shadow: 0 1px 4px 0 rgb(29 28 26 / 0.08), 0 0 0 1px rgb(29 28 26 / 0.04);
+  --swiper-3d-shadow: rgb(29 28 26 / 0.12);
+
+  --md-editor-bg: #fffefb;
+  --md-editor-text: #1d1c1a;
+  --md-editor-separator: #cfc8ba;
+  --md-editor-border: #e6e1d6;
+}
+
+.dark {
+  /* Warm charcoal rather than blue-black, so the dark theme reads as the same paper at night. */
+  --background: #161513;
+  --secondbackground: #1d1c19;
+  --foreground: #ebe7de;
+  --card: #201f1c;
+  --card-foreground: #ebe7de;
+  --popover: #24221f;
+  --popover-foreground: #ebe7de;
+
+  --desc: #a19b90;
+  --ignore: #6c675f;
+  --muted: #2a2825;
+  --muted-foreground: #a19b90;
+  --hover: #2c2a26;
+  --hover-foreground: #cfc9bd;
+
+  --border: #302e2a;
+  --input: #302e2a;
+  --ring: #7fb8a8;
+
+  --primary: #7fb8a8;
+  --primary-foreground: #10201c;
+  --secondary: #d98a64;
+  --secondary-foreground: #1f120c;
+  --accent: #23302c;
+  --accent-foreground: #cfe6de;
+  --destructive: #e0705c;
+  --destructive-foreground: #1e0d09;
+
+  --tag: #d9a571;
+  --tag-foreground: #2b2016;
+  --scrollbar: #2c2a26;
+  --header: rgb(22 21 19 / 0.85);
+
+  --shadow: 0 1px 4px 0 rgb(0 0 0 / 0.4), 0 0 0 1px rgb(255 255 255 / 0.04);
+  --swiper-3d-shadow: rgb(0 0 0 / 0.35);
+
+  --md-editor-bg: #1d1c19;
+  --md-editor-text: #ebe7de;
+  --md-editor-separator: #4a4640;
+  --md-editor-border: #302e2a;
+}
+
+/* Typography: a slightly smaller base (Tailwind sizes are rem, so this scales the whole UI),
+   tight tracking and an easy line height for reading. */
+html {
+  font-size: 15px;
+}
+
+body {
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+/* Overlays keep their scroll to themselves: scrolling past the end of a dialog, drawer, menu or
+   popover never scrolls the page behind it. */
+[role="dialog"],
+[role="dialog"] *,
+[role="menu"],
+[role="listbox"],
+[data-slot="body"],
+[data-slot="content"] {
+  overscroll-behavior: contain;
+}
+
+code,
+kbd,
+pre,
+.font-mono,
+.markdown-body code,
+.markdown-body pre {
+  font-family: var(--font-mono);
+}

@@ -326,12 +326,12 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
           enter: {
             y: 0,
             opacity: 1,
-            transition: { type: 'spring', bounce: 0.5, duration: 0.6, },
+            transition: { type: 'spring', bounce: 0, duration: 0.6, },
           },
           exit: {
             y: -20,
             opacity: 0,
-            transition: { type: 'spring', bounce: 0.5, duration: 0.3, },
+            transition: { type: 'spring', bounce: 0, duration: 0.3, },
           },
         }
       }}

@@ -43,7 +43,7 @@ export const MobileNavBar = observer(({ onItemClick }: MobileNavBarProps) => {
         damping: 25,
         stiffness: 300,
         mass: 0.8,
-        bounce: 0.3
+        bounce: 0
       }}
       style={{
         background: getFixedHeaderBackground(),
@@ -66,7 +66,7 @@ export const MobileNavBar = observer(({ onItemClick }: MobileNavBarProps) => {
         >
           <Link
             className={`w-full h-full items-center justify-center flex !flex-col group ${SideBarItem} ${base.isSideBarActive(routerInfo, i) ? '!text-foreground' : '!text-desc'
-              } transition-all duration-200 hover:scale-110 active:scale-95`}
+              } transition-[background-color,color,scale] duration-150 ease-out active:scale-[0.96]`}
             to={i.href}
             onClick={() => {
               base.currentRouter = i;
@@ -74,7 +74,7 @@ export const MobileNavBar = observer(({ onItemClick }: MobileNavBarProps) => {
             }}
           >
             <motion.div
-              whileTap={{ scale: 0.9 }}
+              whileTap={{ scale: 0.96 }}
               whileHover={{ scale: 1.1 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >

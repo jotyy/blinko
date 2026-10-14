@@ -370,7 +370,7 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
           <div className="flex justify-center mt-4 w-full h-16">
             {isRecording ? (
               <button
-                className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center focus:outline-none active:transform active:scale-95 transition-transform"
+                className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center focus:outline-none enabled:active:scale-[0.96] transition-transform duration-150 ease-out"
                 onClick={handleStopRecording}
               >
                 <div className="w-6 h-6 bg-white rounded"></div>
@@ -378,13 +378,13 @@ export const MyAudioRecorder = ({ onComplete }: MyAudioRecorderProps) => {
             ) : (
               <div className="flex gap-5 items-center justify-center h-full">
                 <button
-                  className="w-16 h-16 rounded-full bg-neutral-800 flex items-center justify-center focus:outline-none active:transform active:scale-95 transition-transform"
+                  className="w-16 h-16 rounded-full bg-neutral-800 flex items-center justify-center focus:outline-none enabled:active:scale-[0.96] transition-transform duration-150 ease-out"
                   onClick={handleDelete}
                 >
                   <Icon icon="mdi:close" className="text-red-500" width="30" height="30" />
                 </button>
                 <button
-                  className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center focus:outline-none active:transform active:scale-95 transition-transform"
+                  className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center focus:outline-none enabled:active:scale-[0.96] transition-transform duration-150 ease-out"
                   onClick={handleComplete}
                 >
                   <Icon icon="mdi:check" className="text-white" width="30" height="30" />

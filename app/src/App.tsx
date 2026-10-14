@@ -1,6 +1,8 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ThemeProvider } from 'next-themes';
+import { MotionConfig } from 'framer-motion';
+import { MotionConfig as MotionReactConfig } from 'motion/react';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { HeroUIProvider } from '@heroui/react';
 import './styles/github-markdown.css';
@@ -282,14 +284,20 @@ function App() {
       />
       <BrowserRouter>
         <HeroUIProvider>
-          <ThemeProvider attribute="class" enableSystem={false}>
-            <AppProvider />
-            <CommonLayout>
-              <div className="app-content">
-                <AppRoutes />
-                <BlinkoMultiSelectPop />
-              </div>
-            </CommonLayout>
+          {/* disableTransitionOnChange: no colour transitions firing at once on a theme swap.
+              reducedMotion="user": both motion libraries honour the OS "Reduce motion" setting. */}
+          <ThemeProvider attribute="class" enableSystem={false} disableTransitionOnChange>
+            <MotionConfig reducedMotion="user">
+              <MotionReactConfig reducedMotion="user">
+                <AppProvider />
+                <CommonLayout>
+                  <div className="app-content">
+                    <AppRoutes />
+                    <BlinkoMultiSelectPop />
+                  </div>
+                </CommonLayout>
+              </MotionReactConfig>
+            </MotionConfig>
           </ThemeProvider>
         </HeroUIProvider>
         <BlinkoMusicPlayer />
