@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useIsIOS } from '@/lib/hooks';
 import { DialogStore } from '@/store/module/Dialog';
 import { observer } from 'mobx-react-lite';
+import { observable, runInAction } from 'mobx';
 import { ScrollArea } from '../Common/ScrollArea';
 import { MarkdownRender } from '../Common/MarkdownRender';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -68,6 +69,17 @@ export const UserAvatar = observer(({ account, guestName, isAuthor, blinkoItem, 
     </div>
   );
 });
+
+// Which card has its thread open. One at a time, so the feed never turns into a wall of threads.
+export const commentPanel = observable({ openId: null as number | null });
+export const toggleComments = (id?: number | null) => {
+  if (id == null) return;
+  runInAction(() => { commentPanel.openId = commentPanel.openId === id ? null : id; });
+};
+export const openComments = (id?: number | null) => {
+  if (id == null) return;
+  runInAction(() => { commentPanel.openId = id; });
+};
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
@@ -156,7 +168,7 @@ const NestedComment = observer(({
   );
 });
 
-export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem }) => {
+export const CommentDialog = observer(({ blinkoItem, inline = false, onClose }: { blinkoItem: BlinkoItem, inline?: boolean, onClose?: () => void }) => {
   const { t } = useTranslation();
   const blinko = RootStore.Get(BlinkoStore);
   const [content, setContent] = useState('');
@@ -258,7 +270,12 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
   useEffect(() => {
     Store.commentList.resetAndCall({});
     // Focus after the dialog has mounted, so typing can start immediately.
-    const id = setTimeout(() => inputRef.current?.focus(), 60);
+    const id = setTimeout(() => {
+      const el = inputRef.current; if (!el) return;
+      el.focus({ preventScroll: true });
+      // Inline, the thread unfolds under the note: reveal the composer only as far as needed.
+      if (inline) setTimeout(() => el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 220);
+    }, 60);
     return () => clearTimeout(id);
   }, []);
 
@@ -277,12 +294,14 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
     <div className="flex flex-col">
       {/* Thread */}
       {Store.commentList.isEmpty ? (
-        <div className="flex flex-col items-center gap-1 py-6 text-center">
-          <Icon icon="reicon:chat-round-dots" width="22" height="22" className="text-ignore" />
-          <div className="text-[13px] text-desc">{t('no-comments-yet')}</div>
-        </div>
+        inline ? null : (
+          <div className="flex flex-col items-center gap-1 py-6 text-center">
+            <Icon icon="reicon:chat-round-dots" width="22" height="22" className="text-ignore" />
+            <div className="text-[13px] text-desc">{t('no-comments-yet')}</div>
+          </div>
+        )
       ) : (
-        <ScrollArea className="md:max-h-[480px] max-h-[360px] overflow-y-auto -mt-2 pb-2" onBottom={async () => {
+        <ScrollArea className={`${inline ? 'max-h-[420px]' : 'md:max-h-[480px] max-h-[360px] -mt-2'} overflow-y-auto pb-2`} onBottom={async () => {
           await Store.commentList.callNextPage({});
         }}>
           <div ref={listRef} className="flex flex-col gap-0.5 px-2">
@@ -313,7 +332,10 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
             onChange={(e) => setContent(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
-              if (e.key === 'Escape' && Store.reply.id) { e.preventDefault(); e.stopPropagation(); Store.reply = { id: null, name: '' }; }
+              if (e.key === 'Escape') {
+                if (Store.reply.id) { e.preventDefault(); e.stopPropagation(); Store.reply = { id: null, name: '' }; }
+                else if (inline && !content) { e.preventDefault(); e.stopPropagation(); onClose?.(); }
+              }
             }}
             placeholder={Store.reply.id ? t('write-a-reply', { defaultValue: 'Write a reply…' }) : t('leave-a-comment', { defaultValue: 'Leave a comment…' })}
             className="block flex-1 min-w-0 resize-none bg-transparent pl-3 py-[9px] text-[14px] leading-[22px] outline-none placeholder:text-ignore"
@@ -361,7 +383,7 @@ export const SimpleCommentList = observer(({ blinkoItem }: { blinkoItem: BlinkoI
         <button
           type="button"
           key={comment.id}
-          onClick={(e) => { e.stopPropagation(); ShowCommentDialog(blinkoItem.id!); }}
+          onClick={(e) => { e.stopPropagation(); openComments(blinkoItem.id); }}
           className="text-left text-[13px] leading-relaxed text-desc rounded-lg -mx-1.5 px-1.5 py-1 hover:bg-hover hover:text-foreground/80 transition-colors duration-150"
         >
           <span className="line-clamp-3">
@@ -373,6 +395,32 @@ export const SimpleCommentList = observer(({ blinkoItem }: { blinkoItem: BlinkoI
         </button>
       ))}
     </div>
+  );
+});
+
+// The thread, opened in place under the note. Clicks inside never reach the card (which would
+// select or start editing it); Esc in an empty composer folds it away.
+export const InlineComments = observer(({ blinkoItem }: { blinkoItem: BlinkoItem }) => {
+  const isOpen = commentPanel.openId === blinkoItem.id;
+  const stop = (e: React.SyntheticEvent) => e.stopPropagation();
+  return (
+    <AnimatePresence initial={false}>
+      {isOpen && (
+        <motion.div
+          key="thread"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          className="overflow-hidden -mx-1 px-1"
+          onClick={stop} onDoubleClick={stop} onContextMenu={stop} onKeyDown={stop} onPointerDown={stop}
+        >
+          <div className="mt-3 pt-3 border-t border-border/70">
+            <CommentDialog blinkoItem={blinkoItem} inline onClose={() => toggleComments(blinkoItem.id)} />
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 });
 
@@ -413,14 +461,10 @@ export const ShowCommentDialog = async (noteId: number) => {
 export const CommentButton = observer(({ blinkoItem, alwaysShow = false }: { blinkoItem: Note, alwaysShow?: boolean }) => {
   const { t } = useTranslation();
   const isIOSDevice = useIsIOS();
+  const isOpen = commentPanel.openId === blinkoItem.id;
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    RootStore.Get(DialogStore).setData({
-      isOpen: true,
-      size: 'lg',
-      title: `${i18n.t('comment')} ${blinkoItem._count?.comments ? `(${blinkoItem._count.comments})` : ''}`,
-      content: <CommentDialog blinkoItem={blinkoItem} />
-    });
+    toggleComments(blinkoItem.id);
   };
 
   return (
@@ -432,7 +476,7 @@ export const CommentButton = observer(({ blinkoItem, alwaysShow = false }: { bli
           height="15"
           className={`cursor-pointer ml-2 ${isIOSDevice
             ? 'opacity-60'
-            : `${alwaysShow ? '!text-ignore' : '!text-desc opacity-0 group-hover/card:opacity-100 transition-opacity duration-150'}`
+            : isOpen ? '!text-primary' : `${alwaysShow ? '!text-ignore' : '!text-desc opacity-0 group-hover/card:opacity-100 transition-opacity duration-150'}`
             }`}
           onClick={handleClick}
         />
@@ -445,12 +489,7 @@ export const CommentCount = observer(({ blinkoItem }: { blinkoItem: Note }) => {
   if (blinkoItem?._count?.comments == 0) return null;
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    RootStore.Get(DialogStore).setData({
-      isOpen: true,
-      size: 'lg',
-      title: `${i18n.t('comment')} ${blinkoItem._count?.comments ? `(${blinkoItem._count.comments})` : ''}`,
-      content: <CommentDialog blinkoItem={blinkoItem} />
-    });
+    toggleComments(blinkoItem.id);
   };
   return (
     <div className="flex items-center gap-1 hover:bg-background rounded-full px-1 py-0.5 cursor-pointer" onClick={handleClick}>

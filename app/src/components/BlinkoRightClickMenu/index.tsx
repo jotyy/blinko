@@ -21,7 +21,7 @@ import { ToastPlugin } from "@/store/module/Toast/Toast";
 import { Note } from "@shared/lib/types";
 import { BlinkoCard } from "../BlinkoCard";
 import { useLocation } from "react-router-dom";
-import { ShowCommentDialog } from "../BlinkoCard/commentButton";
+import { openComments } from "../BlinkoCard/commentButton";
 import { useMediaQuery } from "usehooks-ts";
 import { FocusEditorFixMobile } from "@/components/Common/Editor/editorUtils";
 
@@ -346,7 +346,7 @@ const handleRelatedNotes = async () => {
 const handleComment = () => {
   const blinko = RootStore.Get(BlinkoStore)
   if (blinko.curSelectedNote?.id) {
-    ShowCommentDialog(blinko.curSelectedNote.id)
+    openComments(blinko.curSelectedNote.id)
   }
 }
 
