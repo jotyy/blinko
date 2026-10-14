@@ -60,7 +60,7 @@ const Page = observer(() => {
         <ScrollArea
           fixMobileTopBar
           onBottom={resourceStore.loadNextPage}
-          className="md:px-6 h-[calc(100%_-_5px)] md:h-[calc(100vh_-_100px)] px-2 md:max-w-[1000px] w-full overflow-x-hidden mx-auto"
+          className="md:px-6 h-[calc(100%_-_5px)] md:h-[calc(100vh_-_100px)] px-2 max-w-7xl w-full overflow-x-hidden mx-auto"
         >
           <div className="flex items-center justify-between ">
             <div className="flex items-center gap-2">

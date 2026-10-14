@@ -1,5 +1,4 @@
-import Editor from '../Common/Editor';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api } from '@/lib/trpc';
 import { UserStore } from '@/store/user';
 import { PromisePageState, PromiseState } from '@/store/standard/PromiseState';
@@ -70,12 +69,15 @@ export const UserAvatar = observer(({ account, guestName, isAuthor, blinkoItem, 
   );
 });
 
-// Recursive Comment Component for nested rendering
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
+
+// One comment in the thread: avatar, name and time on one line, the body aligned under the name.
+// Reply / delete appear on hover (always on touch); delete asks once more in place before it acts.
 const NestedComment = observer(({
   comment,
   blinkoItem,
   depth = 0,
-  Store
+  Store,
 }: {
   comment: Comment['items'][0],
   blinkoItem: BlinkoItem,
@@ -84,67 +86,69 @@ const NestedComment = observer(({
 }) => {
   const { t } = useTranslation();
   const user = RootStore.Get(UserStore);
-  const maxDepth = 5; // Limit nesting depth to prevent UI issues
+  const [confirming, setConfirming] = useState(false);
+  useEffect(() => {
+    if (!confirming) return;
+    const timer = setTimeout(() => setConfirming(false), 3000);
+    return () => clearTimeout(timer);
+  }, [confirming]);
+  const name = comment.account?.nickname || comment.account?.name || comment.guestName || t('anonymous');
+  const canDelete = (user.id === comment.note?.account?.id || user.id === comment.account?.id) && !blinkoItem.originURL;
+  const isFresh = Store.freshId === comment.id;
+  const ua = comment.account ? '' : Store.safeUA(comment?.guestUA ?? '');
+  const action = 'grid place-items-center size-7 rounded-md text-desc hover:text-foreground hover:bg-hover transition-colors duration-150';
 
   return (
-    <div
-      key={comment.id}
-      className={`mb-2 border-divider p-2 rounded-2xl bg-background ${depth > 0 ? 'ml-6' : ''}`}
-      style={{ marginLeft: `${Math.min(depth * 24, maxDepth * 24)}px` }}
-    >
-      <div className="flex items-center justify-between">
-        <UserAvatar
-          account={comment.account || undefined}
-          guestName={comment.guestName || undefined}
-          isAuthor={true}
-          blinkoItem={blinkoItem}
-        />
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="light"
-            isIconOnly
-            onPress={() => Store.handleReply(comment.id, comment.account?.nickname || comment.account?.name || comment.guestName || '')}
-          >
-            <Icon icon="akar-icons:comment" width="16" height="16" />
-          </Button>
-          {(user.id === comment.note?.account?.id || user.id === comment.account?.id) && !blinkoItem.originURL && (
-            <Button
-              size="sm"
-              variant="light"
-              color="danger"
-              isIconOnly
-              onPress={() => Store.handleDelete.call(comment.id)}
-            >
-              <Icon icon="akar-icons:trash" width="16" height="16" />
-            </Button>
-          )}
+    <div data-comment-id={comment.id}>
+      <div className={`group/comment relative flex gap-3 rounded-xl px-2 py-2 -mx-2 transition-colors duration-700 ${isFresh ? 'bg-primary/10' : 'bg-transparent'}`}>
+        <div className="pt-0.5 shrink-0">
+          <UserAvatar account={comment.account || undefined} guestName={comment.guestName || undefined} withoutName size={24} />
         </div>
-      </div>
-      <div className="p-2 -mt-2">
-        <MarkdownRender content={comment.content} />
-        <div className="text-xs text-desc mt-1 flex items-center gap-2">
-          <span>{dayjs(comment.createdAt).fromNow()}</span>
-          {Store.safeUA(comment?.guestUA ?? '') && (
-            <>
-              <span>·</span>
-              <span>{t('from')} {Store.safeUA(comment?.guestUA ?? '')}</span>
-            </>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-2 pr-16 min-w-0">
+            <span className="text-[13px] font-medium text-foreground truncate">{name}</span>
+            {comment.account && String(comment.account.id) === String(blinkoItem.accountId) && (
+              <span className="text-[11px] text-desc">{t('author')}</span>
+            )}
+            <Tooltip content={dayjs(comment.createdAt).format('YYYY-MM-DD HH:mm')} delay={500} closeDelay={0}>
+              <span className="text-[12px] text-desc tabular-nums shrink-0">{dayjs(comment.createdAt).fromNow()}</span>
+            </Tooltip>
+            {ua && <span className="text-[12px] text-ignore truncate">· {ua}</span>}
+          </div>
+          <div className="comment-body text-[14px] leading-relaxed mt-0.5">
+            <MarkdownRender content={comment.content} />
+          </div>
+        </div>
+        <div className="absolute right-1 top-1.5 flex items-center gap-0.5 opacity-0 group-hover/comment:opacity-100 focus-within:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity duration-150">
+          <Tooltip content={t('reply', { defaultValue: 'Reply' })} delay={400} closeDelay={0}>
+            <button type="button" aria-label={t('reply', { defaultValue: 'Reply' })} className={action}
+              onClick={() => Store.handleReply(comment.id, name)}>
+              <Icon icon="reicon:reply" width="16" height="16" />
+            </button>
+          </Tooltip>
+          {canDelete && (
+            confirming ? (
+              <button type="button" onClick={() => Store.handleDelete.call(comment.id)}
+                className="h-7 px-2 rounded-md text-[12px] font-medium text-danger bg-danger/10 hover:bg-danger/15 transition-colors duration-150">
+                {t('delete')}?
+              </button>
+            ) : (
+              <Tooltip content={t('delete')} delay={400} closeDelay={0}>
+                <button type="button" aria-label={t('delete')} className={`${action} hover:!text-danger`} onClick={() => setConfirming(true)}>
+                  <Icon icon="reicon:trash" width="16" height="16" />
+                </button>
+              </Tooltip>
+            )
           )}
         </div>
       </div>
 
-      {/* Render nested replies recursively */}
+      {/* Replies hang off a hairline under the parent's avatar. Past a few levels they stop
+          indenting, so a long exchange never squeezes the text column. */}
       {comment.replies && comment.replies.length > 0 && (
-        <div className="mt-2">
+        <div className={`${depth < 3 ? 'ml-[11px] pl-[21px]' : ''} border-l border-border`}>
           {comment.replies.map((reply) => (
-            <NestedComment
-              key={reply.id}
-              comment={reply}
-              blinkoItem={blinkoItem}
-              depth={depth + 1}
-              Store={Store}
-            />
+            <NestedComment key={reply.id} comment={reply} blinkoItem={blinkoItem} depth={depth + 1} Store={Store} />
           ))}
         </div>
       )}
@@ -157,13 +161,15 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
   const blinko = RootStore.Get(BlinkoStore);
   const [content, setContent] = useState('');
   const user = RootStore.Get(UserStore);
-  const hubStore = RootStore.Get(HubStore);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const Store = RootStore.Local(() => ({
     reply: {
       id: null as number | null,
       name: ''
     },
+    freshId: null as number | null,
     commentList: new PromisePageState({
       function: async ({ page, size }) => {
         if (blinkoItem.originURL) {
@@ -171,7 +177,7 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
             noteId: blinkoItem.id,
             page,
             size,
-            orderBy: 'desc'
+            orderBy: 'asc'
           })
           return res.data.items
         }
@@ -180,16 +186,14 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
           noteId: blinkoItem.id!,
           page,
           size,
-          orderBy: 'desc'
+          orderBy: 'asc'
         })
         return res.items
       }
     }),
     handleReply: (commentId: number, commentName: string) => {
-      Store.reply = {
-        id: commentId,
-        name: commentName
-      }
+      Store.reply = { id: commentId, name: commentName }
+      inputRef.current?.focus()
     },
     handleSendComment: new PromiseState({
       function: async ({ content }: { content: string }) => {
@@ -211,9 +215,21 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
           await api.comments.create.mutate(params);
         }
 
-        await Store.commentList.resetAndCall({});
         setContent('');
+        Store.reply = { id: null, name: '' };
+        await Store.commentList.resetAndCall({});
         blinko.updateTicker++
+        // Bring the new comment (the highest id in the thread; create returns no row) into view
+        // and let it glow for a moment.
+        const maxId = (items: any[] = []): number => items.reduce((m, c) => Math.max(m, c.id, maxId(c.replies)), -1);
+        const top = maxId(Store.commentList.value as any[]);
+        const id = top >= 0 ? top : null;
+        Store.freshId = id;
+        requestAnimationFrame(() => {
+          const el = id != null ? listRef.current?.querySelector(`[data-comment-id="${id}"]`) : null;
+          (el as HTMLElement | null)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          setTimeout(() => { if (Store.freshId === id) Store.freshId = null }, 1200);
+        });
       }
     }),
     handleDelete: new PromiseState({
@@ -241,65 +257,82 @@ export const CommentDialog = observer(({ blinkoItem }: { blinkoItem: BlinkoItem 
 
   useEffect(() => {
     Store.commentList.resetAndCall({});
+    // Focus after the dialog has mounted, so typing can start immediately.
+    const id = setTimeout(() => inputRef.current?.focus(), 60);
+    return () => clearTimeout(id);
   }, []);
 
+  // The composer grows with its content, up to a cap, then scrolls.
+  useEffect(() => {
+    const el = inputRef.current; if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+  }, [content]);
+
+  const sending = Store.handleSendComment.loading.value;
+  const canSend = content.trim().length > 0 && !sending;
+  const send = () => { if (canSend) Store.handleSendComment.call({ content }) };
+
   return (
-    <div>
-      {/* Comment List */}
+    <div className="flex flex-col">
+      {/* Thread */}
       {Store.commentList.isEmpty ? (
-        <div className="text-center text-gray-500 py-4">{t('no-comments-yet')}</div>
+        <div className="flex flex-col items-center gap-1 py-6 text-center">
+          <Icon icon="reicon:chat-round-dots" width="22" height="22" className="text-ignore" />
+          <div className="text-[13px] text-desc">{t('no-comments-yet')}</div>
+        </div>
       ) : (
-        <ScrollArea className="md:max-h-[550px] max-h-[400px] overflow-y-auto -mt-4" onBottom={async () => {
+        <ScrollArea className="md:max-h-[480px] max-h-[360px] overflow-y-auto -mt-2 pb-2" onBottom={async () => {
           await Store.commentList.callNextPage({});
         }}>
-          {Store.commentList.value?.map((comment: Comment['items'][0]) => (
-            <NestedComment
-              key={comment.id}
-              comment={comment}
-              blinkoItem={blinkoItem}
-              depth={0}
-              Store={Store}
-            />
-          ))}
+          <div ref={listRef} className="flex flex-col gap-0.5 px-2">
+            {Store.commentList.value?.map((comment: Comment['items'][0]) => (
+              <NestedComment key={comment.id} comment={comment} blinkoItem={blinkoItem} depth={0} Store={Store} />
+            ))}
+          </div>
         </ScrollArea>
       )}
 
-      {/* Reply UI */}
-      <AnimatePresence>
+      {/* Composer */}
+      <div className="mt-2 rounded-[14px] bg-card border border-border focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 transition-[border-color,box-shadow] duration-150">
         {Store.reply.id && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="flex items-center justify-between mt-3 p-2 bg-background rounded-lg"
-          >
-            <div className="text-sm text-yellow-500 font-bold">
-              {t('reply-to')} <span>@{Store.reply.name}</span>
-            </div>
-            <Icon
-              icon="material-symbols:close"
-              className="cursor-pointer text-default-400 hover:text-default-500"
-              width="18"
-              onClick={() => Store.reply = { id: null, name: '' }}
-            />
-          </motion.div>
+          <div className="flex items-center gap-1.5 pl-3 pr-1.5 pt-2 text-[12px] text-desc">
+            <Icon icon="reicon:reply" width="14" height="14" />
+            <span className="truncate">{t('reply-to')} <span className="font-medium text-foreground">@{Store.reply.name}</span></span>
+            <button type="button" aria-label={t('cancel')} onClick={() => { Store.reply = { id: null, name: '' }; inputRef.current?.focus() }}
+              className="ml-auto grid place-items-center size-6 rounded-md hover:bg-hover hover:text-foreground transition-colors duration-150">
+              <Icon icon="reicon:xmark" width="14" height="14" />
+            </button>
+          </div>
         )}
-      </AnimatePresence>
-
-      {/* Editor */}
-      <div className="pt-3">
-        <Editor
-          mode='comment'
-          content={content}
-          onChange={setContent}
-          onSend={async ({ content }) => {
-            await Store.handleSendComment.call({ content })
-          }}
-          isSendLoading={Store.handleSendComment.loading.value}
-          originFiles={[]}
-          originReference={[]}
-          hiddenToolbar
-        />
+        <div className="flex items-end gap-2 pr-1.5">
+          <textarea
+            ref={inputRef}
+            rows={1}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
+              if (e.key === 'Escape' && Store.reply.id) { e.preventDefault(); e.stopPropagation(); Store.reply = { id: null, name: '' }; }
+            }}
+            placeholder={Store.reply.id ? t('write-a-reply', { defaultValue: 'Write a reply…' }) : t('leave-a-comment', { defaultValue: 'Leave a comment…' })}
+            className="block flex-1 min-w-0 resize-none bg-transparent pl-3 py-[9px] text-[14px] leading-[22px] outline-none placeholder:text-ignore"
+          />
+          <div className="flex items-center gap-2 h-10 shrink-0">
+            <span className={`text-[11px] text-ignore tabular-nums transition-opacity duration-150 ${content ? 'opacity-100' : 'opacity-0'}`}>
+              {isMac ? '⌘' : 'Ctrl'} ↵
+            </span>
+            <button
+              type="button"
+              aria-label={t('send', { defaultValue: 'Send' })}
+              disabled={!canSend}
+              onClick={send}
+              className="grid place-items-center size-7 rounded-full bg-foreground text-background enabled:active:scale-[0.96] disabled:opacity-20 transition-[opacity,scale] duration-150"
+            >
+              {sending ? <Spinner size="sm" color="current" classNames={{ wrapper: 'size-3.5' }} /> : <Icon icon="reicon:arrow-up" width="15" height="15" />}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
