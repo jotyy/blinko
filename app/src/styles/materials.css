@@ -357,3 +357,10 @@ button.h-12 > span > svg {
 .composer-tray-row > div {
   gap: 2px !important;
 }
+
+/* ---- Settings: grouped cards ----------------------------------------------------------- */
+/* Rows inside a settings card are separated by a hairline, whatever wrappers sit between them. */
+.settings-card-body .settings-row + .settings-row,
+.settings-card-body > * + .settings-row {
+  border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}

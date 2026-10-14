@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Modal, ModalContent, ModalBody, Input, Button, Divider } from '@heroui/react';
+import { Modal, ModalContent, ModalBody, Input, Button } from '@heroui/react';
 import { Icon } from '@/components/Common/Iconify/icons';
 import { useTranslation } from 'react-i18next';
 import { RootStore } from '@/store';
@@ -316,6 +316,11 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
     </div>
   );
 
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const Key = ({ children }: { children: React.ReactNode }) => (
+    <kbd className="inline-grid place-items-center min-w-[20px] h-[20px] px-1 rounded-[5px] border border-border bg-background text-[11px] font-medium font-sans text-desc">{children}</kbd>
+  );
+
   return (
     <Modal
       isOpen={isOpen}
@@ -335,20 +340,24 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
           },
         }
       }}
+      hideCloseButton
       classNames={{
-        base: 'max-w-2xl mx-auto mt-10',
+        base: 'max-w-2xl mx-auto mt-[12vh] rounded-[18px] overflow-hidden',
       }}
     >
       <ModalContent>
-        <ModalBody className="py-4">
-          <div className="flex flex-col gap-3">
+        <ModalBody className="p-0 gap-0">
+          <div className="flex flex-col">
             {/* Search Input */}
             <Input
               ref={searchInputRef}
               aria-label="global-search"
-              className={cn("mt-4", {
-                'input-highlight': store.isAiQuestion,
-              })}
+              className={cn({ 'input-highlight': store.isAiQuestion })}
+              classNames={{
+                // The field is the top of the palette, not a box inside it: no fill, no ring.
+                inputWrapper: '!bg-transparent !shadow-none border-0 h-14 px-5 rounded-none group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-offset-0',
+                input: 'text-[17px] placeholder:text-desc/80',
+              }}
               placeholder={t('search-or-ask-ai')}
               value={store.searchQuery}
               onChange={(e) => {
@@ -359,14 +368,14 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
               onKeyDown={handleKeyDown}
               startContent={
                 <Icon
-                  className=""
+                  className={cn('mr-1 shrink-0', store.isAiQuestion ? 'text-primary' : 'text-desc')}
                   icon={
                     store.isAiQuestion
                       ? 'hugeicons:ai-beautify'
                       : 'lets-icons:search'
                   }
-                  width="24"
-                  height="24"
+                  width="18"
+                  height="18"
                 />
               }
               endContent={
@@ -377,7 +386,8 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
                       variant="light"
                       size="sm"
                       onPress={() => store.setSearchQuery('')}
-                      className="hover:text-danger transition-colors"
+                      aria-label={t('clear', { defaultValue: 'Clear' })}
+                      className="text-desc hover:text-foreground transition-colors"
                     >
                       <Icon icon="ph:x-bold" width="16" height="16" />
                     </Button>
@@ -387,9 +397,10 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
                     variant="light"
                     size="sm"
                     onPress={() => store.toggleAiQuestion()}
-                    className={cn('hover:text-primary transition-colors', store.isAiQuestion && 'text-primary')}
+                    aria-label={t('to-ask-ai')}
+                    className={cn('text-desc hover:text-primary transition-colors', store.isAiQuestion && 'text-primary')}
                   >
-                    <Icon icon={store.isAiQuestion ? 'lets-icons:search' : 'hugeicons:ai-beautify'} width="20" height="20" />
+                    <Icon icon={store.isAiQuestion ? 'lets-icons:search' : 'hugeicons:ai-beautify'} width="18" height="18" />
                   </Button>
                 </div>
               }
@@ -397,7 +408,7 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
 
             {/* Search Results */}
             {store.searchQuery && (
-              <div className="mt-2">
+              <div className="border-t border-border/70 px-2 py-2">
                 <LoadingAndEmpty isLoading={store.isSearching} isEmpty={!store.hasResults} />
                 <ScrollArea className="max-h-[600px] md:max-h-[400px]" onBottom={() => { }}>
                   <div className="flex flex-col gap-3 px-1">
@@ -406,8 +417,8 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
-                            <Icon icon="hugeicons:sticky-note-02" className="h-4 w-4 mr-2 text-primary" />
-                            <h3 className="text-sm font-medium text-default-700">{t('note')}</h3>
+                            <Icon icon="hugeicons:sticky-note-02" className="h-3.5 w-3.5 mr-1.5 text-desc" />
+                            <div className="text-[12px] font-medium text-desc">{t('note')}</div>
                           </div>
                         </div>
                         <div className="flex flex-col">{store.searchResults.notes.map(renderNoteItem)}</div>
@@ -417,11 +428,10 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
                     {/* Resources section - only show if not in tag search mode */}
                     {store.searchResults.resources.length > 0 && (
                       <div className="flex flex-col gap-1">
-                        <Divider className="my-2" />
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
-                            <Icon icon="mingcute:folder-line" className="h-4 w-4 mr-2 text-success" />
-                            <h3 className="text-sm font-medium text-default-700">{t('resources')}</h3>
+                            <Icon icon="mingcute:folder-line" className="h-3.5 w-3.5 mr-1.5 text-desc" />
+                            <div className="text-[12px] font-medium text-desc">{t('resources')}</div>
                           </div>
                         </div>
                         <div className="flex flex-col">{store.searchResults.resources.map(renderResourceItem)}</div>
@@ -431,11 +441,10 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
                     {/* Settings section - only show if not in tag search mode */}
                     {store.searchResults.settings.length > 0 && (
                       <div className="flex flex-col gap-1">
-                        <Divider className="my-2" />
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
-                            <Icon icon="tabler:settings" className="mr-2 text-warning" />
-                            <h3 className="text-sm font-medium text-default-700">{t('settings')}</h3>
+                            <Icon icon="tabler:settings" className="h-3.5 w-3.5 mr-1.5 text-desc" />
+                            <div className="text-[12px] font-medium text-desc">{t('settings')}</div>
                           </div>
                         </div>
                         <div className="flex flex-col">{store.searchResults.settings.map(renderSettingItem)}</div>
@@ -446,20 +455,21 @@ export const GlobalSearch = observer(({ isOpen, onOpenChange }: GlobalSearchProp
               </div>
             )}
 
-            <div className="text-xs text-default-500 flex justify-between items-center">
-              <div>
+            <div className="border-t border-border/70 px-4 py-2.5 text-[12px] text-desc flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0 truncate">
                 {store.isAiQuestion ? (
-                  t('to-ask-ai')
+                  <span className="flex items-center gap-1.5"><Key>↵</Key>{t('to-ask-ai')}</span>
                 ) : (
                   <>
-                    {t('press-enter-to-select-first-result')} • <span className="text-primary">@</span> {t('to-ask-ai')} • <span className="text-primary">#</span> {t('to-search-tags')}
+                    <span className="flex items-center gap-1.5"><Key>↵</Key>{t('press-enter-to-select-first-result')}</span>
+                    <span className="flex items-center gap-1.5"><Key>@</Key>{t('to-ask-ai')}</span>
+                    <span className="flex items-center gap-1.5"><Key>#</Key>{t('to-search-tags')}</span>
                   </>
                 )}
               </div>
-              <div className="flex items-center gap-1">
-                <kbd className="px-2 py-1 bg-default-100 rounded text-default-600 text-xs">Ctrl</kbd>
-                <span>+</span>
-                <kbd className="px-2 py-1 bg-default-100 rounded text-default-600 text-xs">K</kbd>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <Key>esc</Key>
+                <Key>{isMac ? '⌘K' : 'Ctrl K'}</Key>
               </div>
             </div>
           </div>

@@ -14,15 +14,16 @@ type IProps = {
 
 export const Item = observer(({ leftContent, rightContent, type = 'row', hidden = false, className }: IProps) => {
   if (hidden) return null
+  // Rows of a grouped settings card: regular-weight labels, a hairline between rows.
   if (type == 'col') {
-    return <div className={`flex flex-col py-2 ${className}`}>
-      <div className="font-semibold">{leftContent}</div>
+    return <div className={`settings-row flex flex-col py-3 ${className ?? ''}`}>
+      <div className="text-[14px] font-medium text-foreground">{leftContent}</div>
       <div className="mt-2 w-full">{rightContent}</div>
     </div>
   } else {
-    return <div className={`flex flex-row items-center py-2 ${className}`}>
-      {!!leftContent && <div className={rightContent ? "font-semibold" : 'w-full'}>{leftContent}</div>}
-      {!!rightContent && <div className="ml-auto">{rightContent}</div>}
+    return <div className={`settings-row flex flex-row items-center gap-4 min-h-[48px] py-2.5 ${className ?? ''}`}>
+      {!!leftContent && <div className={rightContent ? "text-[14px] font-medium text-foreground min-w-0" : 'w-full'}>{leftContent}</div>}
+      {!!rightContent && <div className="ml-auto shrink-0">{rightContent}</div>}
     </div>
   }
 })
@@ -34,7 +35,7 @@ export const ItemWithTooltip = observer(({ content, toolTipContent }: { content:
     </div>}>
       <div className="flex items-center gap-2">
         {content}
-        <Icon icon="proicons:info" width="18" height="18" />
+        <Icon icon="proicons:info" width="15" height="15" className="text-desc" />
       </div>
     </Tooltip>
 })

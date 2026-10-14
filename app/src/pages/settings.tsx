@@ -218,24 +218,24 @@ const Page = observer(() => {
       ) : (
         <div className="w-full max-w-[1200px] mx-auto px-4 py-4 flex flex-row h-full">
           <div className="w-56 mr-6">
-            <div className="rounded-xl bg-background p-1 mb-4">
+            <div className="rounded-[16px] bg-card [box-shadow:var(--heroui-box-shadow-small)] p-1.5 mb-4">
               <ScrollArea onBottom={() => { }} className="h-auto max-h-[calc(100vh-140px)]">
-                <div className="p-1 flex flex-col flex-nowrap gap-1">
+                <div className="flex flex-col flex-nowrap gap-0.5">
                   {tabItems.map((item) => (
                     <button
                       key={item.key}
                       onClick={() => setSelected(item.key)}
-                      className={`cursor-pointer flex items-center px-3 py-2 rounded-lg text-sm transition-colors ${selected === item.key
-                        ? 'bg-primary text-primary-foreground font-medium'
-                        : 'hover:bg-muted/50 text-foreground/80 hover:text-foreground'
+                      className={`group cursor-pointer flex items-center h-[36px] px-3 rounded-[10px] text-[14px] font-medium transition-colors duration-150 ${selected === item.key
+                        ? 'is-active bg-primary/12 text-primary'
+                        : 'hover:bg-hover text-foreground/85 hover:text-foreground'
                         }`}
                     >
                       {item.icon && (
-                        <span className="flex-shrink-0 mr-2">
-                          <Icon icon={item.icon} width="18" />
+                        <span className="flex-shrink-0 mr-2.5 text-desc group-hover:text-foreground group-[.is-active]:!text-primary transition-colors duration-150">
+                          <Icon icon={item.icon} width="17" height="17" />
                         </span>
                       )}
-                      <span className="font-bold">{typeof item.title === 'string' ? t(item.title) : item.title}</span>
+                      <span className="truncate">{typeof item.title === 'string' ? t(item.title) : item.title}</span>
                     </button>
                   ))}
                 </div>

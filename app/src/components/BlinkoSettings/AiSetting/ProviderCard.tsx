@@ -99,9 +99,9 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
           key={capability}
           size="sm"
           startContent={CAPABILITY_ICONS[capability as keyof ModelCapabilities]}
-          variant="solid"
-          className='text-white'
-          color={CAPABILITY_COLORS[capability as keyof ModelCapabilities]}
+          variant="flat"
+          radius="full"
+          classNames={{ base: 'bg-muted text-foreground/75 h-[22px] px-1.5', content: 'text-[11px] font-medium px-1' }}
         >
           {CAPABILITY_LABELS[capability as keyof ModelCapabilities]}
         </Chip>
@@ -109,7 +109,7 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
   };
 
   return (
-    <Card className="mb-4 bg-secondbackground group" shadow='none'>
+    <Card className="mb-3 bg-secondbackground group rounded-[14px]" shadow='none' radius='none'>
       <CardBody>
         <div className={`flex ${isMobile ? 'flex-col space-y-3' : 'justify-between items-start'} mb-3`}>
           <div className="flex items-center gap-3">
@@ -125,9 +125,9 @@ export default observer(function ProviderCard({ provider }: ProviderCardProps) {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-bold truncate">{provider.title}</h3>
+              <div className="text-[15px] font-semibold truncate">{provider.title}</div>
               {provider.baseURL && (
-                <p className="text-tiny text-gray-400 truncate">{provider.baseURL}</p>
+                <p className="text-[12px] text-desc truncate">{provider.baseURL}</p>
               )}
             </div>
           </div>

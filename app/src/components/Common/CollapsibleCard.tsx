@@ -1,4 +1,4 @@
-import { Card, Button } from "@heroui/react";
+import { Card } from "@heroui/react";
 import { Icon } from '@/components/Common/Iconify/icons';
 import { motion, AnimatePresence } from "motion/react";
 import { useState, ReactNode, useEffect } from "react";
@@ -10,47 +10,6 @@ interface CollapsibleCardProps {
   className?: string;
   defaultCollapsed?: boolean;
 }
-
-const DECORATIVE_ICONS = [
-  "uil:thunderstorm",
-  "uil:bug",
-  "uil:surprise",
-  "uil:brightness-low",
-  // "uil:kid",
-  "uil:flask",
-  "uil:confused",
-  "uil:favorite",
-  "uil:compact-disc"
-];
-
-const usedIcons: any = new Set<string>();
-
-const RandomIcon = ({ className = "" }) => {
-  const [icon, setIcon] = useState<any>("");
-
-  useEffect(() => {
-    const availableIcons = DECORATIVE_ICONS.filter(icon => !usedIcons.has(icon));
-
-    if (availableIcons.length === 0) {
-      usedIcons.clear();
-    }
-
-    const randomIcon = availableIcons[Math.floor(Math.random() * availableIcons.length)];
-    usedIcons.add(randomIcon);
-    setIcon(randomIcon);
-  }, []);
-
-  const randomRotate = Math.floor(Math.random() * 360);
-  const randomSize = 30 + Math.floor(Math.random() * 30);
-
-  return icon ? (
-    <Icon
-      icon={icon}
-      className={`absolute transform rotate-${randomRotate} ${className}`}
-      width={randomSize}
-    />
-  ) : null;
-};
 
 export const CollapsibleCard = ({
   icon,
@@ -72,36 +31,25 @@ export const CollapsibleCard = ({
   };
 
   return (
-    <Card shadow="none" className={`flex flex-col p-2 md:p-4 bg-background relative ${className}`}>
-      <div className="absolute inset-0 overflow-hidden opacity-[0.03] pointer-events-none">
-        <RandomIcon className="right-[10%] bottom-[20%]" />
-        <RandomIcon className="left-[15%] top-[25%]" />
-        <RandomIcon className="right-[30%] top-[15%]" />
-        <RandomIcon className="left-[25%] bottom-[30%]" />
-        <RandomIcon className="right-[45%] bottom-[15%]" />
-        <RandomIcon className="left-[40%] top-[40%]" />
-        <RandomIcon className="right-[20%] top-[35%]" />
-        <RandomIcon className="left-[35%] bottom-[25%]" />
-      </div>
-
-      <div className='flex items-center justify-between mb-2'>
-        <div className="flex items-center gap-2">
-          <Icon icon={icon} width="20" height="20" />
-          <div className="font-bold">{title}</div>
+    <Card shadow="none" radius="none" className={`settings-card flex flex-col px-4 pt-3 pb-1 bg-card rounded-[16px] [box-shadow:var(--heroui-box-shadow-small)] relative ${className}`}>
+      <div className="flex items-center justify-between min-h-[36px]">
+        <div className="flex items-center gap-2 text-foreground">
+          <Icon icon={icon} width="17" height="17" className="text-desc" />
+          <div className="text-[15px] font-semibold tracking-[-0.01em]">{title}</div>
         </div>
-        <Button
-          size="sm"
-          isIconOnly
-          variant="flat"
-          onPress={() => handleCollapse(!isCollapsed)}
+        <button
+          type="button"
+          aria-expanded={!isCollapsed}
+          onClick={() => handleCollapse(!isCollapsed)}
+          className="grid place-items-center size-[28px] rounded-full text-desc hover:text-foreground hover:bg-hover transition-colors duration-150"
         >
           <Icon
-            icon={isCollapsed ? "tabler:chevron-down" : "tabler:chevron-up"}
-            width="20"
-            height="20"
-            className="cursor-pointer hover:bg-default-100 rounded-full p-0.5 transition-transform"
+            icon="tabler:chevron-down"
+            width="16"
+            height="16"
+            className={`transition-transform duration-150 motion-reduce:transition-none ${isCollapsed ? '' : 'rotate-180'}`}
           />
-        </Button>
+        </button>
       </div>
 
       <AnimatePresence>
@@ -116,7 +64,7 @@ export const CollapsibleCard = ({
             }}
             style={{ overflow: 'hidden' }}
           >
-            {children}
+            <div className="settings-card-body mt-1">{children}</div>
           </motion.div>
         )}
       </AnimatePresence>

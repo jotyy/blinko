@@ -58,10 +58,10 @@ export default observer(function AiSetting() {
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <Button
-              size='md'
+              size='sm'
               className='ml-auto'
-              color="primary"
-              startContent={<Icon icon="iconamoon:cloud-add-light" width="20" height="20" />}
+              variant="flat"
+              startContent={<Icon icon="iconamoon:cloud-add-light" width="16" height="16" />}
               onPress={() => {
                 RootStore.Get(DialogStore).setData({
                   isOpen: true,
