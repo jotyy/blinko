@@ -153,9 +153,10 @@
 
 /* ---- Translucent overlays: menus, popovers, tooltips, dialogs ----------------------------- */
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  [data-slot="content"].bg-content1,
-  [role="menu"],
-  [role="listbox"][data-slot="list"] {
+  /* Exactly one blurred layer per overlay: the outer content box. The menu or listbox inside it
+     must stay transparent with no filter of its own. Nested backdrop-filters (and their stacked
+     translucent fills) make Chromium flicker while the overlay scales in and out. */
+  [data-slot="content"].bg-content1 {
     background-color: var(--material-regular) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     backdrop-filter: blur(24px) saturate(180%);
